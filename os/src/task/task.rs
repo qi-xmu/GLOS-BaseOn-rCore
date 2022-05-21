@@ -163,7 +163,7 @@ impl TaskControlBlock {
             .ppn();
         // alloc a pid and a kernel stack in kernel space
         let pid_handle = pid_alloc();
-        let mut new_fd_table: FileDescriptorTable = Vec::new();
+        let new_fd_table: FileDescriptorTable = Vec::new();
         let kernel_stack = KernelStack::new(&pid_handle);
         let kernel_stack_top = kernel_stack.get_top();
         let task_control_block = Arc::new(TaskControlBlock {

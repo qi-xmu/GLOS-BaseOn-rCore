@@ -105,7 +105,7 @@ impl OSInode {
 
     pub fn find(&self, path: &str, flags: OpenFlags) -> Option<Arc<OSInode>> {
         let inner = self.inner.lock();
-        let mut new_path: Vec<&str> = path.split('/').collect();
+        let new_path: Vec<&str> = path.split('/').collect();
         let vfile = inner.inode.find_vfile_bypath(new_path);
         if vfile.is_none() {
             return None;
@@ -158,6 +158,7 @@ impl OSInode {
 
 lazy_static! {
     pub static ref ROOT_INODE: Arc<VFile> = {
+        println!("open fat32 start");
         let fat32_manager = FAT32Manager::open(BLOCK_DEVICE.clone());
         let manager_reader = fat32_manager.read();
         Arc::new(manager_reader.get_root_vfile(&fat32_manager))
@@ -165,7 +166,7 @@ lazy_static! {
 }
 
 pub fn list_apps() {
-    println!("/**** APPS ****");
+    println!("/**** APPS ****/");
     for app in ROOT_INODE.ls_lite().unwrap() {
         if app.1 & ATTRIBUTE_DIRECTORY == 0 {
             println!("{}", app.0);
