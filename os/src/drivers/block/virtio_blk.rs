@@ -8,7 +8,7 @@ use alloc::vec::Vec;
 use lazy_static::*;
 use virtio_drivers::{VirtIOBlk, VirtIOHeader};
 
-use spin::Mutex;
+// use spin::Mutex;
 
 #[allow(unused)]
 const VIRTIO0: usize = 0x10001000;
@@ -39,8 +39,7 @@ impl VirtIOBlock {
     pub fn new() -> Self {
         unsafe {
             Self(UPSafeCell::new(
-                VirtIOBlk::new(&mut *(VIRTIO0 as *mut VirtIOHeader))
-                    .expect("Error when reading VirtIOBlk"),
+                VirtIOBlk::new(&mut *(VIRTIO0 as *mut VirtIOHeader)).unwrap(),
             ))
         }
     }

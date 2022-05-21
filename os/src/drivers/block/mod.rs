@@ -11,7 +11,7 @@ type BlockDeviceImpl = virtio_blk::VirtIOBlock;
 #[cfg(feature = "board_k210")]
 type BlockDeviceImpl = sdcard::SDCardWrapper;
 
-lazy_static! {
+lazy_static! { // ref point define
     pub static ref BLOCK_DEVICE: Arc<dyn BlockDevice> = Arc::new(BlockDeviceImpl::new());
 }
 

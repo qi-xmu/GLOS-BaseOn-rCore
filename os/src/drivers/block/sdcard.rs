@@ -18,7 +18,6 @@ use k210_soc::{
     sysctl,
 };
 use lazy_static::*;
-// use spin::Mutex;
 
 pub struct SDCard<SPI> {
     spi: SPI,
