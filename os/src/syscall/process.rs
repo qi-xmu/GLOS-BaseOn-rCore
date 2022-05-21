@@ -1,11 +1,14 @@
-use crate::loader::get_app_data_by_name;
-use crate::mm::{translated_refmut, translated_str};
+use crate::mm::{translated_ref, translated_refmut, translated_str};
 use crate::task::{
     add_task, current_task, current_user_token, exit_current_and_run_next,
     suspend_current_and_run_next,
 };
 use crate::timer::get_time_ms;
+use alloc::string::String;
 use alloc::sync::Arc;
+use alloc::vec::Vec;
+
+use crate::fs::{open, DiskInodeType, OpenFlags};
 
 pub fn sys_exit(exit_code: i32) -> ! {
     exit_current_and_run_next(exit_code);
@@ -39,13 +42,42 @@ pub fn sys_fork() -> isize {
     new_pid as isize
 }
 
-pub fn sys_exec(path: *const u8) -> isize {
+pub fn sys_exec(path: *const u8, mut args: *const usize) -> isize {
+    println!("user call sys_exec.");
     let token = current_user_token();
     let path = translated_str(token, path);
-    if let Some(data) = get_app_data_by_name(path.as_str()) {
+
+    let mut args_vec: Vec<String> = Vec::new();
+    loop {
+        let arg_str_ptr = *translated_ref(token, args);
+        if arg_str_ptr == 0 {
+            break;
+        }
+        args_vec.push(translated_str(token, arg_str_ptr as *const u8));
+        unsafe {
+            args = args.add(1);
+        }
+    }
+    let task = current_task().unwrap();
+    let inner = task.inner_exclusive_access();
+    let current_path = inner.current_path.as_str();
+    let args_vec_copy = args_vec.clone();
+
+    if let Some(app_inode) = open(
+        current_path,
+        path.as_str(),
+        OpenFlags::RDONLY,
+        DiskInodeType::File,
+    ) {
+        let all_data = app_inode.read_all();
+        println!("data len: {}", all_data.len());
         let task = current_task().unwrap();
-        task.exec(data);
-        0
+        let argc = args_vec.len();
+        drop(inner);
+        task.exec(all_data.as_slice());
+        // task.exec(all_data.as_slice(), args_vec);
+        // return argc because cx.x[10] will be covered with it later
+        argc as isize
     } else {
         -1
     }

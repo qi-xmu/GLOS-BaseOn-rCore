@@ -4,6 +4,7 @@ MODE := release
 KERNEL_ELF := target/$(TARGET)/$(MODE)/os
 KERNEL_BIN := $(KERNEL_ELF).bin
 DISASM_TMP := target/$(TARGET)/$(MODE)/asm
+APPS := ../user/src/bin/*
 
 # BOARD
 BOARD ?= qemu
@@ -71,7 +72,6 @@ disasm-vim: kernel
 	@rm $(DISASM_TMP)
 
 run: run-inner
-
 	
 
 run-inner: build
@@ -90,6 +90,7 @@ else
 	python3 $(K210-BURNER) -p $(K210-SERIALPORT) -b 1500000 $(KERNEL_BIN)
 	python3 -m serial.tools.miniterm --eol LF --dtr 0 --rts 0 --filter direct $(K210-SERIALPORT) 115200
 endif
+
 
 debug: build
 	@tmux new-session -d \
