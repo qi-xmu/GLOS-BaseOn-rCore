@@ -4,6 +4,7 @@ include ../Makefile.in
 DISASM_TMP := target/$(TARGET)/$(MODE)/asm
 FS_IMG := ../user/target/$(TARGET)/$(MODE)/fs.img
 APPS := ../user/src/bin/*
+SDCARD := /dev/sda
 
 # BOARD
 BOARD ?= qemu
@@ -43,18 +44,20 @@ else ifeq ($(BOARD), k210)
 	(which last-k210) || (rm -f last-qemu && touch last-k210 && make clean)
 endif
 
-sdcard: $(FS_IMG)
-	@echo "Are you sure write to $(SDCARD) ? [y/N] " && read ans && [ $${ans:-N} = y ]
-	@sudo dd if=/dev/zero of=$(SDCARD) bs=1048576 count=16
-	@sudo dd if=$(FS_IMG) of=$(SDCARD)
+
 
 $(FS_IMG): $(APPS)
 	@cd ../user && make build
 	@cd ../mkfs && cargo run --release -- -s ../user/src/bin/ -t ../user/target/riscv64gc-unknown-none-elf/release/
 
-$(APPS):
-	
+sdcard: $(FS_IMG)
+	@echo "Are you sure write to $(SDCARD) ? [y/N] " && read ans && [ $${ans:-N} = y ]
+	@sudo dd if=/dev/zero of=$(SDCARD) bs=1048576 count=16
+	@sudo dd if=$(FS_IMG) of=$(SDCARD)
 
+$(APP):
+
+	
 env:
 	(rustup target list | grep "riscv64gc-unknown-none-elf (installed)") || rustup target add $(TARGET)
 	cargo install cargo-binutils --vers =0.3.3
@@ -73,6 +76,7 @@ kernel:
 
 clean:
 	@cargo clean
+	@rm ../user/target/riscv64gc-unknown-none-elf/release/fs.img
 
 disasm: kernel
 	@$(OBJDUMP) $(DISASM) $(KERNEL_ELF) | less
@@ -115,4 +119,4 @@ gdbserver: build
 gdbclient:
 	@riscv64-unknown-elf-gdb -ex 'file $(KERNEL_ELF)' -ex 'set arch riscv:rv64' -ex 'target remote localhost:1234'
 
-.PHONY: build env kernel clean disasm disasm-vim run-inner switch-check gdbserver gdbclient
+.PHONY: build env kernel clean disasm disasm-vim run-inner switch-check gdbserver gdbclient 
