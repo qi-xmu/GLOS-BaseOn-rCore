@@ -1,10 +1,18 @@
-DOCKER_NAME ?= dinghao188/rcore-tutorial
-.PHONY: docker build_docker
+include Makefile.in
 
-docker:
-	docker run --rm -it --mount type=bind,source=$(shell pwd),destination=/mnt ${DOCKER_NAME}
+all: build 
 
-build_docker: 
-	docker build -t ${DOCKER_NAME} .
-fmt:
-	cd os ; cargo fmt; cd ../user; cargo fmt; cd ..
+build:
+	cd os \
+	&& make BOARD=k210 \
+	&& cp $(KERNEL_BIN) ../os.bin
+
+fs:
+	sudo ./mkfs.sh
+
+clean:
+	rm os.bin \
+	&& cd os \
+	&& make clean \
+
+.PHONY: chean fs

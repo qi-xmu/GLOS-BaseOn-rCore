@@ -1,0 +1,7 @@
+
+# base os
+TARGET := riscv64gc-unknown-none-elf
+MODE := release
+KERNEL_ELF := target/$(TARGET)/$(MODE)/os
+KERNEL_BIN := $(KERNEL_ELF).bin
+USER_BIN := ../riscv-syscalls-testing/user/riscv64/

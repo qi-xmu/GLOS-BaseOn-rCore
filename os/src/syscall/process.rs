@@ -61,7 +61,7 @@ pub fn sys_exec(path: *const u8, mut args: *const usize) -> isize {
     let task = current_task().unwrap();
     let inner = task.inner_exclusive_access();
     let current_path = inner.current_path.as_str();
-    let args_vec_copy = args_vec.clone();
+    // let args_vec_copy = args_vec.clone();
 
     if let Some(app_inode) = open(
         current_path,

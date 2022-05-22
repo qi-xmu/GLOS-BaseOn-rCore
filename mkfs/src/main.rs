@@ -1,8 +1,7 @@
-use std::fs::{File, OpenOptions, read_dir};
-use std::io::{Read, Write, Seek, SeekFrom};
-use std::sync::{ Mutex, Arc };
-use std::ptr;
-use clap::{Arg, App};
+use clap::{App, Arg};
+use std::fs::{read_dir, File, OpenOptions};
+use std::io::{Read, Seek, SeekFrom, Write};
+use std::sync::{Arc, Mutex};
 
 pub mod fs;
 pub use fs::*;
@@ -20,9 +19,7 @@ use crate::init::{init_boot, init_fat, init_fsinfo, init_root};
 
 mod init;
 
-
 const BSIZE: usize = 512;
-
 
 // [Boot | FAT | Root Dir Sector | Data ]
 
@@ -52,23 +49,25 @@ fn main() {
 
 fn make() -> std::io::Result<()> {
     let matches = App::new("EasyFileSystem packer")
-        .arg(Arg::with_name("source")
-            .short("s") // 对应输入的 -s
-            .long("source")//对应输入 --source
-            .takes_value(true)
-            .help("Executable source dir(with backslash)")
+        .arg(
+            Arg::with_name("source")
+                .short("s") // 对应输入的 -s
+                .long("source") //对应输入 --source
+                .takes_value(true)
+                .help("Executable source dir(with backslash)"),
         )
-        .arg(Arg::with_name("target")
-            .short("t")
-            .long("target")
-            .takes_value(true)
-            .help("Executable target dir(with backslash)")    
+        .arg(
+            Arg::with_name("target")
+                .short("t")
+                .long("target")
+                .takes_value(true)
+                .help("Executable target dir(with backslash)"),
         )
         .get_matches();
     let src_path = matches.value_of("source").unwrap();
     let target_path = matches.value_of("target").unwrap();
     println!("src_path = {}\ntarget_path = {}", src_path, target_path);
-    
+
     // 打开U盘
     let block_file = Arc::new(BlockFile(Mutex::new({
         let f = OpenOptions::new()
@@ -88,7 +87,7 @@ fn make() -> std::io::Result<()> {
     init_fsinfo(block_file.clone());
     init_fat(block_file.clone());
     init_root(block_file.clone());
-    
+
     let fs_manager = FAT32Manager::create(block_file.clone());
     let fs_reader = fs_manager.read();
     let root_vfile = fs_reader.get_root_vfile(&fs_manager);
@@ -108,7 +107,6 @@ fn make() -> std::io::Result<()> {
         })
         .collect();
     for app in apps {
-       
         // 获取所有用户可执行程序
         let mut host_file = File::open(format!("{}{}", target_path, app)).unwrap();
         let mut all_data: Vec<u8> = Vec::new();
@@ -122,16 +120,19 @@ fn make() -> std::io::Result<()> {
             continue;
         }
         let vfile = o_vfile.unwrap();
-        println!("vfile: name {}, short_sector {}, short_offset {}", vfile.get_name(), vfile.short_sector, vfile.short_offset);
+        println!(
+            "vfile: name {}, short_sector {}, short_offset {}",
+            vfile.get_name(),
+            vfile.short_sector,
+            vfile.short_offset
+        );
         println!("vfile is dir: {}", vfile.is_dir());
 
         // 向文件镜像中写入数据
         println!("file_len = {}", all_data.len());
-        
+
         vfile.write_at(0, all_data.as_slice());
         fs_manager.read().cache_write_back();
-        
-        
     }
     // list apps
 

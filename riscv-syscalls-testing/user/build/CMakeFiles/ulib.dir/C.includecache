@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/stddef.h
+
+../include/unistd.h
+stddef.h
+../include/stddef.h
+
+../lib/arch/riscv/syscall_arch.h
+
+/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/lib/syscall.c
+stddef.h
+-
+unistd.h
+-
+syscall.h
+/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/lib/syscall.h
+
+/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/lib/syscall.h
+syscall_arch.h
+/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/lib/syscall_arch.h
+syscall_ids.h
+/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/lib/syscall_ids.h
+
+/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/lib/syscall_ids.h
+
