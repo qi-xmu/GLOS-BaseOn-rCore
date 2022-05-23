@@ -5,3 +5,12 @@ MODE := release
 KERNEL_ELF := target/$(TARGET)/$(MODE)/os
 KERNEL_BIN := $(KERNEL_ELF).bin
 USER_BIN := ../riscv-syscalls-testing/user/riscv64/
+
+GDB := riscv64-unknown-elf-gdb
+
+DISASM_TMP := target/$(TARGET)/$(MODE)/asm
+
+FS_IMG := ../user/target/$(TARGET)/$(MODE)/fs.img
+
+APPS := user/src/bin/*
+SDCARD := /dev/sda

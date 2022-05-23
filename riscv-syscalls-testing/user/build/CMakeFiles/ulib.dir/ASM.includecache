@@ -6,3 +6,7 @@
 
 #IncludeRegexTransform: 
 
+/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/lib/arch/riscv/crt.S
+
+/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/src/oscomp/clone.s
+

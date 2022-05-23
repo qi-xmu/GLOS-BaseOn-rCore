@@ -1,5 +1,5 @@
 
-/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/riscv64/sleep:     file format elf64-littleriscv
+/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/riscv64/sleep:     file format elf64-littleriscv
 
 
 Disassembly of section .text:

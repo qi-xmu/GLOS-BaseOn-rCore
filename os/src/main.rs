@@ -2,7 +2,6 @@
 // #![deny(warnings)]
 #![no_std]
 #![no_main]
-#![warn(unused_variables)] // temp
 #![feature(panic_info_message)]
 #![feature(alloc_error_handler)]
 

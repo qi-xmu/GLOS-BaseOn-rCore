@@ -6,4 +6,4 @@ CMakeFiles/open.dir/src/oscomp/open.c.o
  ../include/stdio.h
  ../include/stdlib.h
  ../include/unistd.h
- /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/src/oscomp/open.c
+ /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/src/oscomp/open.c

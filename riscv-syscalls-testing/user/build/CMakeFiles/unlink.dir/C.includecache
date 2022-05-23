@@ -20,7 +20,7 @@ stddef.h
 stddef.h
 ../include/stddef.h
 
-/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/src/oscomp/unlink.c
+/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/src/oscomp/unlink.c
 stdlib.h
 -
 string.h

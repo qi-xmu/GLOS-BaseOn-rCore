@@ -7,4 +7,4 @@ CMakeFiles/uname.dir/src/oscomp/uname.c.o
  ../include/stdlib.h
  ../include/string.h
  ../include/unistd.h
- /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/src/oscomp/uname.c
+ /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/src/oscomp/uname.c

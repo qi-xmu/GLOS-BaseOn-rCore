@@ -6,4 +6,4 @@ CMakeFiles/read.dir/src/oscomp/read.c.o
  ../include/stdio.h
  ../include/stdlib.h
  ../include/unistd.h
- /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/src/oscomp/read.c
+ /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/src/oscomp/read.c

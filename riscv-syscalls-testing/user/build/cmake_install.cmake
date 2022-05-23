@@ -1,4 +1,4 @@
-# Install script for directory: /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user
+# Install script for directory: /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

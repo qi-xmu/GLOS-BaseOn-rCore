@@ -5,8 +5,8 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_ASM
-  "/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/lib/arch/riscv/crt.S" "/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles/ulib.dir/lib/arch/riscv/crt.S.o"
-  "/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/src/oscomp/clone.s" "/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles/ulib.dir/src/oscomp/clone.s.o"
+  "/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/lib/arch/riscv/crt.S" "/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles/ulib.dir/lib/arch/riscv/crt.S.o"
+  "/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/src/oscomp/clone.s" "/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles/ulib.dir/src/oscomp/clone.s.o"
   )
 set(CMAKE_ASM_COMPILER_ID "GNU")
 
@@ -16,11 +16,11 @@ set(CMAKE_ASM_TARGET_INCLUDE_PATH
   "../lib/arch/riscv"
   )
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/lib/main.c" "/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles/ulib.dir/lib/main.c.o"
-  "/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/lib/stdio.c" "/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles/ulib.dir/lib/stdio.c.o"
-  "/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/lib/stdlib.c" "/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles/ulib.dir/lib/stdlib.c.o"
-  "/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/lib/string.c" "/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles/ulib.dir/lib/string.c.o"
-  "/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/lib/syscall.c" "/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles/ulib.dir/lib/syscall.c.o"
+  "/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/lib/main.c" "/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles/ulib.dir/lib/main.c.o"
+  "/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/lib/stdio.c" "/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles/ulib.dir/lib/stdio.c.o"
+  "/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/lib/stdlib.c" "/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles/ulib.dir/lib/stdlib.c.o"
+  "/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/lib/string.c" "/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles/ulib.dir/lib/string.c.o"
+  "/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/lib/syscall.c" "/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles/ulib.dir/lib/syscall.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

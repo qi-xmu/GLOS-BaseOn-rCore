@@ -44,10 +44,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user
+CMAKE_SOURCE_DIR = /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build
+CMAKE_BINARY_DIR = /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -140,14 +140,14 @@ clean: CMakeFiles/test_echo.dir/clean
 CMakeFiles/write.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/write.dir/build.make CMakeFiles/write.dir/depend
 	$(MAKE) -f CMakeFiles/write.dir/build.make CMakeFiles/write.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=72,73 "Built target write"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=72,73 "Built target write"
 .PHONY : CMakeFiles/write.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/write.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/write.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/write.dir/rule
 
 # Convenience name for target.
@@ -167,14 +167,14 @@ CMakeFiles/write.dir/clean:
 CMakeFiles/waitpid.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/waitpid.dir/build.make CMakeFiles/waitpid.dir/depend
 	$(MAKE) -f CMakeFiles/waitpid.dir/build.make CMakeFiles/waitpid.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=70,71 "Built target waitpid"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=70,71 "Built target waitpid"
 .PHONY : CMakeFiles/waitpid.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/waitpid.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/waitpid.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/waitpid.dir/rule
 
 # Convenience name for target.
@@ -194,14 +194,14 @@ CMakeFiles/waitpid.dir/clean:
 CMakeFiles/unlink.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/unlink.dir/build.make CMakeFiles/unlink.dir/depend
 	$(MAKE) -f CMakeFiles/unlink.dir/build.make CMakeFiles/unlink.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=66,67 "Built target unlink"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=66,67 "Built target unlink"
 .PHONY : CMakeFiles/unlink.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/unlink.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/unlink.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/unlink.dir/rule
 
 # Convenience name for target.
@@ -221,14 +221,14 @@ CMakeFiles/unlink.dir/clean:
 CMakeFiles/getcwd.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/getcwd.dir/build.make CMakeFiles/getcwd.dir/depend
 	$(MAKE) -f CMakeFiles/getcwd.dir/build.make CMakeFiles/getcwd.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=21,22 "Built target getcwd"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=21,22 "Built target getcwd"
 .PHONY : CMakeFiles/getcwd.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/getcwd.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/getcwd.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/getcwd.dir/rule
 
 # Convenience name for target.
@@ -248,14 +248,14 @@ CMakeFiles/getcwd.dir/clean:
 CMakeFiles/wait.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/wait.dir/build.make CMakeFiles/wait.dir/depend
 	$(MAKE) -f CMakeFiles/wait.dir/build.make CMakeFiles/wait.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=68,69 "Built target wait"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=68,69 "Built target wait"
 .PHONY : CMakeFiles/wait.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/wait.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/wait.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/wait.dir/rule
 
 # Convenience name for target.
@@ -275,14 +275,14 @@ CMakeFiles/wait.dir/clean:
 CMakeFiles/exit.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/exit.dir/build.make CMakeFiles/exit.dir/depend
 	$(MAKE) -f CMakeFiles/exit.dir/build.make CMakeFiles/exit.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=15,16 "Built target exit"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=15,16 "Built target exit"
 .PHONY : CMakeFiles/exit.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/exit.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/exit.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/exit.dir/rule
 
 # Convenience name for target.
@@ -302,14 +302,14 @@ CMakeFiles/exit.dir/clean:
 CMakeFiles/execve.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/execve.dir/build.make CMakeFiles/execve.dir/depend
 	$(MAKE) -f CMakeFiles/execve.dir/build.make CMakeFiles/execve.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=13,14 "Built target execve"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=13,14 "Built target execve"
 .PHONY : CMakeFiles/execve.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/execve.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/execve.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/execve.dir/rule
 
 # Convenience name for target.
@@ -329,14 +329,14 @@ CMakeFiles/execve.dir/clean:
 CMakeFiles/getdents.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/getdents.dir/build.make CMakeFiles/getdents.dir/depend
 	$(MAKE) -f CMakeFiles/getdents.dir/build.make CMakeFiles/getdents.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=23,24 "Built target getdents"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=23,24 "Built target getdents"
 .PHONY : CMakeFiles/getdents.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/getdents.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/getdents.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/getdents.dir/rule
 
 # Convenience name for target.
@@ -356,14 +356,14 @@ CMakeFiles/getdents.dir/clean:
 CMakeFiles/open.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/open.dir/build.make CMakeFiles/open.dir/depend
 	$(MAKE) -f CMakeFiles/open.dir/build.make CMakeFiles/open.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=39,40 "Built target open"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=39,40 "Built target open"
 .PHONY : CMakeFiles/open.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/open.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/open.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/open.dir/rule
 
 # Convenience name for target.
@@ -383,14 +383,14 @@ CMakeFiles/open.dir/clean:
 CMakeFiles/dup2.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/dup2.dir/build.make CMakeFiles/dup2.dir/depend
 	$(MAKE) -f CMakeFiles/dup2.dir/build.make CMakeFiles/dup2.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=11,12 "Built target dup2"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=11,12 "Built target dup2"
 .PHONY : CMakeFiles/dup2.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/dup2.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/dup2.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/dup2.dir/rule
 
 # Convenience name for target.
@@ -410,14 +410,14 @@ CMakeFiles/dup2.dir/clean:
 CMakeFiles/dup.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/dup.dir/build.make CMakeFiles/dup.dir/depend
 	$(MAKE) -f CMakeFiles/dup.dir/build.make CMakeFiles/dup.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=9,10 "Built target dup"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=9,10 "Built target dup"
 .PHONY : CMakeFiles/dup.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/dup.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/dup.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/dup.dir/rule
 
 # Convenience name for target.
@@ -437,14 +437,14 @@ CMakeFiles/dup.dir/clean:
 CMakeFiles/fork.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/fork.dir/build.make CMakeFiles/fork.dir/depend
 	$(MAKE) -f CMakeFiles/fork.dir/build.make CMakeFiles/fork.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=17,18 "Built target fork"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=17,18 "Built target fork"
 .PHONY : CMakeFiles/fork.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/fork.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/fork.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/fork.dir/rule
 
 # Convenience name for target.
@@ -464,14 +464,14 @@ CMakeFiles/fork.dir/clean:
 CMakeFiles/clone.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/clone.dir/build.make CMakeFiles/clone.dir/depend
 	$(MAKE) -f CMakeFiles/clone.dir/build.make CMakeFiles/clone.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=5,6 "Built target clone"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=5,6 "Built target clone"
 .PHONY : CMakeFiles/clone.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/clone.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/clone.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/clone.dir/rule
 
 # Convenience name for target.
@@ -491,14 +491,14 @@ CMakeFiles/clone.dir/clean:
 CMakeFiles/close.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/close.dir/build.make CMakeFiles/close.dir/depend
 	$(MAKE) -f CMakeFiles/close.dir/build.make CMakeFiles/close.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=7,8 "Built target close"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=7,8 "Built target close"
 .PHONY : CMakeFiles/close.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/close.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/close.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/close.dir/rule
 
 # Convenience name for target.
@@ -518,14 +518,14 @@ CMakeFiles/close.dir/clean:
 CMakeFiles/chdir.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/chdir.dir/build.make CMakeFiles/chdir.dir/depend
 	$(MAKE) -f CMakeFiles/chdir.dir/build.make CMakeFiles/chdir.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=3,4 "Built target chdir"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=3,4 "Built target chdir"
 .PHONY : CMakeFiles/chdir.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/chdir.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/chdir.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/chdir.dir/rule
 
 # Convenience name for target.
@@ -545,14 +545,14 @@ CMakeFiles/chdir.dir/clean:
 CMakeFiles/brk.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/brk.dir/build.make CMakeFiles/brk.dir/depend
 	$(MAKE) -f CMakeFiles/brk.dir/build.make CMakeFiles/brk.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=1,2 "Built target brk"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=1,2 "Built target brk"
 .PHONY : CMakeFiles/brk.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/brk.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/brk.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/brk.dir/rule
 
 # Convenience name for target.
@@ -572,14 +572,14 @@ CMakeFiles/brk.dir/clean:
 CMakeFiles/getpid.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/getpid.dir/build.make CMakeFiles/getpid.dir/depend
 	$(MAKE) -f CMakeFiles/getpid.dir/build.make CMakeFiles/getpid.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=25,26 "Built target getpid"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=25,26 "Built target getpid"
 .PHONY : CMakeFiles/getpid.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/getpid.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/getpid.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/getpid.dir/rule
 
 # Convenience name for target.
@@ -599,14 +599,14 @@ CMakeFiles/getpid.dir/clean:
 CMakeFiles/uname.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/uname.dir/build.make CMakeFiles/uname.dir/depend
 	$(MAKE) -f CMakeFiles/uname.dir/build.make CMakeFiles/uname.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=64,65 "Built target uname"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=64,65 "Built target uname"
 .PHONY : CMakeFiles/uname.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/uname.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/uname.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/uname.dir/rule
 
 # Convenience name for target.
@@ -626,14 +626,14 @@ CMakeFiles/uname.dir/clean:
 CMakeFiles/sleep.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/sleep.dir/build.make CMakeFiles/sleep.dir/depend
 	$(MAKE) -f CMakeFiles/sleep.dir/build.make CMakeFiles/sleep.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=47,48 "Built target sleep"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=47,48 "Built target sleep"
 .PHONY : CMakeFiles/sleep.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/sleep.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/sleep.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/sleep.dir/rule
 
 # Convenience name for target.
@@ -653,14 +653,14 @@ CMakeFiles/sleep.dir/clean:
 CMakeFiles/times.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/times.dir/build.make CMakeFiles/times.dir/depend
 	$(MAKE) -f CMakeFiles/times.dir/build.make CMakeFiles/times.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=51,52 "Built target times"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=51,52 "Built target times"
 .PHONY : CMakeFiles/times.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/times.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/times.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/times.dir/rule
 
 # Convenience name for target.
@@ -680,14 +680,14 @@ CMakeFiles/times.dir/clean:
 CMakeFiles/fstat.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/fstat.dir/build.make CMakeFiles/fstat.dir/depend
 	$(MAKE) -f CMakeFiles/fstat.dir/build.make CMakeFiles/fstat.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=19,20 "Built target fstat"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=19,20 "Built target fstat"
 .PHONY : CMakeFiles/fstat.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/fstat.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/fstat.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/fstat.dir/rule
 
 # Convenience name for target.
@@ -707,14 +707,14 @@ CMakeFiles/fstat.dir/clean:
 CMakeFiles/getppid.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/getppid.dir/build.make CMakeFiles/getppid.dir/depend
 	$(MAKE) -f CMakeFiles/getppid.dir/build.make CMakeFiles/getppid.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=27,28 "Built target getppid"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=27,28 "Built target getppid"
 .PHONY : CMakeFiles/getppid.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/getppid.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/getppid.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/getppid.dir/rule
 
 # Convenience name for target.
@@ -734,14 +734,14 @@ CMakeFiles/getppid.dir/clean:
 CMakeFiles/openat.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/openat.dir/build.make CMakeFiles/openat.dir/depend
 	$(MAKE) -f CMakeFiles/openat.dir/build.make CMakeFiles/openat.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=41,42 "Built target openat"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=41,42 "Built target openat"
 .PHONY : CMakeFiles/openat.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/openat.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/openat.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/openat.dir/rule
 
 # Convenience name for target.
@@ -761,14 +761,14 @@ CMakeFiles/openat.dir/clean:
 CMakeFiles/gettimeofday.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/gettimeofday.dir/build.make CMakeFiles/gettimeofday.dir/depend
 	$(MAKE) -f CMakeFiles/gettimeofday.dir/build.make CMakeFiles/gettimeofday.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=29,30 "Built target gettimeofday"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=29,30 "Built target gettimeofday"
 .PHONY : CMakeFiles/gettimeofday.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/gettimeofday.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/gettimeofday.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/gettimeofday.dir/rule
 
 # Convenience name for target.
@@ -788,14 +788,14 @@ CMakeFiles/gettimeofday.dir/clean:
 CMakeFiles/umount.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/umount.dir/build.make CMakeFiles/umount.dir/depend
 	$(MAKE) -f CMakeFiles/umount.dir/build.make CMakeFiles/umount.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=62,63 "Built target umount"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=62,63 "Built target umount"
 .PHONY : CMakeFiles/umount.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/umount.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/umount.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/umount.dir/rule
 
 # Convenience name for target.
@@ -815,14 +815,14 @@ CMakeFiles/umount.dir/clean:
 CMakeFiles/mkdir_.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/mkdir_.dir/build.make CMakeFiles/mkdir_.dir/depend
 	$(MAKE) -f CMakeFiles/mkdir_.dir/build.make CMakeFiles/mkdir_.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=31,32 "Built target mkdir_"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=31,32 "Built target mkdir_"
 .PHONY : CMakeFiles/mkdir_.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/mkdir_.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/mkdir_.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/mkdir_.dir/rule
 
 # Convenience name for target.
@@ -842,14 +842,14 @@ CMakeFiles/mkdir_.dir/clean:
 CMakeFiles/ulib.dir/all:
 	$(MAKE) -f CMakeFiles/ulib.dir/build.make CMakeFiles/ulib.dir/depend
 	$(MAKE) -f CMakeFiles/ulib.dir/build.make CMakeFiles/ulib.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=53,54,55,56,57,58,59,60,61 "Built target ulib"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=53,54,55,56,57,58,59,60,61 "Built target ulib"
 .PHONY : CMakeFiles/ulib.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/ulib.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 9
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 9
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/ulib.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/ulib.dir/rule
 
 # Convenience name for target.
@@ -869,14 +869,14 @@ CMakeFiles/ulib.dir/clean:
 CMakeFiles/mount.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/mount.dir/build.make CMakeFiles/mount.dir/depend
 	$(MAKE) -f CMakeFiles/mount.dir/build.make CMakeFiles/mount.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=35,36 "Built target mount"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=35,36 "Built target mount"
 .PHONY : CMakeFiles/mount.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/mount.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/mount.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/mount.dir/rule
 
 # Convenience name for target.
@@ -896,14 +896,14 @@ CMakeFiles/mount.dir/clean:
 CMakeFiles/munmap.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/munmap.dir/build.make CMakeFiles/munmap.dir/depend
 	$(MAKE) -f CMakeFiles/munmap.dir/build.make CMakeFiles/munmap.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=37,38 "Built target munmap"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=37,38 "Built target munmap"
 .PHONY : CMakeFiles/munmap.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/munmap.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/munmap.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/munmap.dir/rule
 
 # Convenience name for target.
@@ -923,14 +923,14 @@ CMakeFiles/munmap.dir/clean:
 CMakeFiles/pipe.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/pipe.dir/build.make CMakeFiles/pipe.dir/depend
 	$(MAKE) -f CMakeFiles/pipe.dir/build.make CMakeFiles/pipe.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=43,44 "Built target pipe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=43,44 "Built target pipe"
 .PHONY : CMakeFiles/pipe.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/pipe.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/pipe.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/pipe.dir/rule
 
 # Convenience name for target.
@@ -950,14 +950,14 @@ CMakeFiles/pipe.dir/clean:
 CMakeFiles/mmap.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/mmap.dir/build.make CMakeFiles/mmap.dir/depend
 	$(MAKE) -f CMakeFiles/mmap.dir/build.make CMakeFiles/mmap.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=33,34 "Built target mmap"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=33,34 "Built target mmap"
 .PHONY : CMakeFiles/mmap.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/mmap.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/mmap.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/mmap.dir/rule
 
 # Convenience name for target.
@@ -977,14 +977,14 @@ CMakeFiles/mmap.dir/clean:
 CMakeFiles/read.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/read.dir/build.make CMakeFiles/read.dir/depend
 	$(MAKE) -f CMakeFiles/read.dir/build.make CMakeFiles/read.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=45,46 "Built target read"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=45,46 "Built target read"
 .PHONY : CMakeFiles/read.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/read.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/read.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/read.dir/rule
 
 # Convenience name for target.
@@ -1004,14 +1004,14 @@ CMakeFiles/read.dir/clean:
 CMakeFiles/yield.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/yield.dir/build.make CMakeFiles/yield.dir/depend
 	$(MAKE) -f CMakeFiles/yield.dir/build.make CMakeFiles/yield.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=74,75 "Built target yield"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=74,75 "Built target yield"
 .PHONY : CMakeFiles/yield.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/yield.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/yield.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/yield.dir/rule
 
 # Convenience name for target.
@@ -1031,14 +1031,14 @@ CMakeFiles/yield.dir/clean:
 CMakeFiles/test_echo.dir/all: CMakeFiles/ulib.dir/all
 	$(MAKE) -f CMakeFiles/test_echo.dir/build.make CMakeFiles/test_echo.dir/depend
 	$(MAKE) -f CMakeFiles/test_echo.dir/build.make CMakeFiles/test_echo.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=49,50 "Built target test_echo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles --progress-num=49,50 "Built target test_echo"
 .PHONY : CMakeFiles/test_echo.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/test_echo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 11
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/test_echo.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/build/CMakeFiles 0
 .PHONY : CMakeFiles/test_echo.dir/rule
 
 # Convenience name for target.

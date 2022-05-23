@@ -7,11 +7,11 @@ ASM_FLAGS = -march=rv64imac -mabi=lp64 -mcmodel=medany -fno-builtin -nostdinc -f
 
 ASM_DEFINES = 
 
-ASM_INCLUDES = -I/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/include -I/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/lib/arch/riscv 
+ASM_INCLUDES = -I/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/include -I/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/lib/arch/riscv 
 
 C_FLAGS = -march=rv64imac -mabi=lp64 -mcmodel=medany -fno-builtin -nostdinc -fno-stack-protector -ggdb -Wall -O3 -DNDEBUG  
 
 C_DEFINES = 
 
-C_INCLUDES = -I/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/include -I/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/lib/arch/riscv 
+C_INCLUDES = -I/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/include -I/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/lib/arch/riscv 
 

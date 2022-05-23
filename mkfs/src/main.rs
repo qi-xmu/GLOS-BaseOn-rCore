@@ -1,6 +1,7 @@
 use clap::{App, Arg};
-use std::fs::{read_dir, File, OpenOptions};
+use std::fs::{File, OpenOptions};
 use std::io::{Read, Seek, SeekFrom, Write};
+use std::process::exit;
 use std::sync::{Arc, Mutex};
 
 pub mod fs;
@@ -74,7 +75,7 @@ fn make() -> std::io::Result<()> {
             .read(true)
             .write(true)
             .create(true)
-            .open(format!("{}{}", target_path, "fs.img"))?;
+            .open(format!("{}", target_path))?;
         f.set_len(8192 * 512).unwrap();
         f
     })));
@@ -95,45 +96,59 @@ fn make() -> std::io::Result<()> {
     drop(fs_reader);
 
     // 从host获取应用名
-    let apps: Vec<_> = read_dir(src_path)
-        .unwrap()
-        .into_iter()
-        .map(|dir_entry| {
-            let mut name_with_ext = dir_entry.unwrap().file_name().into_string().unwrap();
-            // 丢弃后缀 从'.'到末尾(len-1)
-            println!("name_with_ext: {}", name_with_ext);
-            name_with_ext.drain(name_with_ext.find('.').unwrap()..name_with_ext.len());
-            name_with_ext
-        })
-        .collect();
-    for app in apps {
-        // 获取所有用户可执行程序
-        let mut host_file = File::open(format!("{}{}", target_path, app)).unwrap();
-        let mut all_data: Vec<u8> = Vec::new();
-        // 将用户程序写入缓冲区
-        host_file.read_to_end(&mut all_data).unwrap();
+    // let apps: Vec<_> = read_dir(src_path)
+    //     .unwrap()
+    //     .into_iter()
+    //     .map(|dir_entry| {
+    //         let mut name_with_ext = dir_entry.unwrap().file_name().into_string().unwrap();
+    //         // 丢弃后缀 从'.'到末尾(len-1)
+    //         println!("name_with_ext: {}", name_with_ext);
+    //         name_with_ext.drain(name_with_ext.find('.').unwrap()..name_with_ext.len());
+    //         name_with_ext
+    //     })
+    //     .collect();
 
-        // 创建一个FAT32文件
-        let o_vfile = root_vfile.create(app.as_str(), ATTRIBUTE_ARCHIVE);
-        if o_vfile.is_none() {
-            // println!("vfile is none.\n");
-            continue;
-        }
-        let vfile = o_vfile.unwrap();
-        println!(
-            "vfile: name {}, short_sector {}, short_offset {}",
-            vfile.get_name(),
-            vfile.short_sector,
-            vfile.short_offset
-        );
-        println!("vfile is dir: {}", vfile.is_dir());
+    // 更改读取方式
+    // let mut buf: String = String::new();
+    // File::open("/home/qi/Rcore/GLOS-BaseOn-rCore/app_list.txt")
+    //     .unwrap()
+    //     .read_to_string(&mut buf)
+    //     .unwrap();
+    // let apps: Vec<_> = buf.split('\n').collect();
+    // println!("{:?}", apps);
 
-        // 向文件镜像中写入数据
-        println!("file_len = {}", all_data.len());
+    // for app in apps {
+    // 获取所有用户可执行程序
+    let target_path = "../riscv-syscalls-testing/user/build/riscv64";
+    let app = "getcwd";
+    println!("{}/{}", target_path, app);
+    let mut host_file = File::open(format!("{}/{}", target_path, app)).unwrap();
+    let mut all_data: Vec<u8> = Vec::new();
+    // 将用户程序写入缓冲区
+    host_file.read_to_end(&mut all_data).unwrap();
 
-        vfile.write_at(0, all_data.as_slice());
-        fs_manager.read().cache_write_back();
+    // 创建一个FAT32文件
+    let o_vfile = root_vfile.create(app, ATTRIBUTE_ARCHIVE);
+    if o_vfile.is_none() {
+        println!("vfile is none.\n");
+        // continue;
+        exit(1);
     }
+    let vfile = o_vfile.unwrap();
+    println!(
+        "vfile: name {}, short_sector {}, short_offset {}",
+        vfile.get_name(),
+        vfile.short_sector,
+        vfile.short_offset
+    );
+    println!("vfile is dir: {}", vfile.is_dir());
+
+    // 向文件镜像中写入数据
+    println!("file_len = {}", all_data.len());
+
+    vfile.write_at(0, all_data.as_slice());
+    fs_manager.read().cache_write_back();
+    // }
     // list apps
 
     for app in root_vfile.ls_lite().unwrap() {

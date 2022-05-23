@@ -6,4 +6,4 @@ CMakeFiles/openat.dir/src/oscomp/openat.c.o
  ../include/stdio.h
  ../include/stdlib.h
  ../include/unistd.h
- /home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/src/oscomp/openat.c
+ /home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/src/oscomp/openat.c

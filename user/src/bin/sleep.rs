@@ -4,10 +4,10 @@
 #[macro_use]
 extern crate user_lib;
 
-use user_lib::{exit, fork, get_time, sleep, waitpid};
+use user_lib::{sleep, exit, get_time, fork, waitpid};
 
 fn sleepy() {
-    let time: usize = 100;
+    let time: usize = 1000;
     for i in 0..5 {
         sleep(time);
         println!("sleep {} x {} msecs.", i + 1, time);

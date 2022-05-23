@@ -20,13 +20,13 @@ stddef.h
 stddef.h
 ../include/stddef.h
 
-/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/src/oscomp/close.c
+/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/src/oscomp/close.c
 unistd.h
-/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/src/oscomp/unistd.h
+/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/src/oscomp/unistd.h
 stdio.h
-/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/src/oscomp/stdio.h
+/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/src/oscomp/stdio.h
 stdlib.h
-/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/src/oscomp/stdlib.h
+/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/src/oscomp/stdlib.h
 string.h
-/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/src/oscomp/string.h
+/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/src/oscomp/string.h
 

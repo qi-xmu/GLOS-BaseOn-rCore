@@ -16,7 +16,7 @@
 stddef.h
 ../include/stddef.h
 
-/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/src/oscomp/getpid.c
+/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/src/oscomp/getpid.c
 stdio.h
 -
 unistd.h

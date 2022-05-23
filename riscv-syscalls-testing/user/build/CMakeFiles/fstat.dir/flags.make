@@ -6,5 +6,5 @@ C_FLAGS = -march=rv64imac -mabi=lp64 -mcmodel=medany -fno-builtin -nostdinc -fno
 
 C_DEFINES = 
 
-C_INCLUDES = -I/home/qi/Rcore/testsuits-for-oskernel/riscv-syscalls-testing/user/include 
+C_INCLUDES = -I/home/qi/Rcore/GLOS-BaseOn-rCore/riscv-syscalls-testing/user/include 
 

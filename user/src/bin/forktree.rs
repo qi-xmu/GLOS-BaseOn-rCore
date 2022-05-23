@@ -4,7 +4,7 @@
 #[macro_use]
 extern crate user_lib;
 
-use user_lib::{exit, fork, getpid, sleep, yield_};
+use user_lib::{sleep, getpid, fork, exit, yield_};
 
 const DEPTH: usize = 4;
 
@@ -14,7 +14,7 @@ fn fork_child(cur: &str, branch: char) {
     if l >= DEPTH {
         return;
     }
-    next[..l].copy_from_slice(cur.as_bytes());
+    &mut next[..l].copy_from_slice(cur.as_bytes());
     next[l] = branch as u8;
     if fork() == 0 {
         fork_tree(core::str::from_utf8(&next[..l + 1]).unwrap());
