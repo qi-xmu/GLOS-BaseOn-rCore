@@ -6,8 +6,8 @@ pub use virtio_blk::VirtIOBlock;
 
 use crate::board::BlockDeviceImpl;
 use alloc::sync::Arc;
+use fat32::BlockDevice;
 use lazy_static::*;
-use FAT32::BlockDevice;
 
 // Arc 多线程安全共享对象的方法；不是为mut，多个指针指向同一块地址
 lazy_static! { // ref point define

@@ -5,6 +5,7 @@
 use crate::sync::UPSafeCell;
 
 use super::BlockDevice;
+use alloc::sync::Arc;
 use core::convert::TryInto;
 use k210_hal::prelude::*;
 use k210_pac::{Peripherals, SPI0};
@@ -18,6 +19,7 @@ use k210_soc::{
     sysctl,
 };
 use lazy_static::*;
+use spin::Mutex;
 
 pub struct SDCard<SPI> {
     spi: SPI,
@@ -339,6 +341,7 @@ impl</*'a,*/ X: SPI> SDCard</*'a,*/ X> {
         /* Wait null data */
         self.read_data(response);
         while response[0] == 0 {
+            println!("[get_dataresponse] Data no accepted !!! ");
             self.read_data(response);
         }
         /* Return response */
@@ -722,12 +725,14 @@ lazy_static! {
 
 fn init_sdcard() -> SDCard<SPIImpl<SPI0>> {
     // wait previous output
-    usleep(100000);
+    // usleep(100000);
+    println!("[sdcard] init sdcard start!");
     let peripherals = unsafe { Peripherals::steal() };
     sysctl::pll_set_freq(sysctl::pll::PLL0, 800_000_000).unwrap();
     sysctl::pll_set_freq(sysctl::pll::PLL1, 300_000_000).unwrap();
     sysctl::pll_set_freq(sysctl::pll::PLL2, 45_158_400).unwrap();
     let clocks = k210_hal::clock::Clocks::new();
+
     peripherals.UARTHS.configure(115_200.bps(), &clocks);
     io_init();
 
@@ -737,29 +742,23 @@ fn init_sdcard() -> SDCard<SPIImpl<SPI0>> {
     let num_sectors = info.CardCapacity / 512;
     assert!(num_sectors > 0);
 
-    // println!("init sdcard!");
+    println!("[sdcard] init sdcard! finish {}", num_sectors);
     sd
 }
 
-pub struct SDCardWrapper(UPSafeCell<SDCard<SPIImpl<SPI0>>>);
+pub struct SDCardWrapper(Arc<Mutex<SDCard<SPIImpl<SPI0>>>>);
 
 impl SDCardWrapper {
     pub fn new() -> Self {
-        unsafe { Self(UPSafeCell::new(init_sdcard())) }
+        unsafe { Self(Arc::new(Mutex::new(init_sdcard()))) }
     }
 }
 
 impl BlockDevice for SDCardWrapper {
     fn read_block(&self, block_id: usize, buf: &mut [u8]) {
-        self.0
-            .exclusive_access()
-            .read_sector(buf, block_id as u32)
-            .unwrap();
+        self.0.lock().read_sector(buf, block_id as u32).unwrap();
     }
     fn write_block(&self, block_id: usize, buf: &[u8]) {
-        self.0
-            .exclusive_access()
-            .write_sector(buf, block_id as u32)
-            .unwrap();
+        self.0.lock().write_sector(buf, block_id as u32).unwrap();
     }
 }

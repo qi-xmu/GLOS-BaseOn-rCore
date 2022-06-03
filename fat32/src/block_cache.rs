@@ -11,8 +11,6 @@ pub struct BlockCache {
     block_id: usize,
     block_device: Arc<dyn BlockDevice>,
     modified: bool,
-    #[allow(unused)]
-    time_stamp: usize,
 }
 
 impl BlockCache {
@@ -20,13 +18,11 @@ impl BlockCache {
     pub fn new(block_id: usize, block_device: Arc<dyn BlockDevice>) -> Self {
         let mut cache = [0u8; BLOCK_SZ];
         block_device.read_block(block_id, &mut cache);
-        let time_stamp = 0;
         Self {
             cache,
             block_id,
             block_device,
             modified: false,
-            time_stamp,
         }
     }
 

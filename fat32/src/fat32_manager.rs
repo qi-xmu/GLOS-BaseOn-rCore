@@ -37,15 +37,6 @@ pub fn create_fat(block_id: usize, device: Arc<dyn BlockDevice>) {
 impl FAT32Manager {
     /// 创建FAT32管理者
     pub fn create(block_device: Arc<dyn BlockDevice>) -> Arc<RwLock<Self>> {
-        // // 初始化文件系统镜像
-        // FatBS::init_boot_sector(Arc::clone(&block_device));
-        // FatExtBS::init_ext_bs(Arc::clone(&block_device));
-        // // 初始化Fat表
-        // create_fat(1, Arc::clone(&block_device));
-        // // 初始化FsInfo
-        // let fs_info = FSInfo::new(1);
-        // fs_info.init_fsinfo(Arc::clone(&block_device));
-        // 打开文件系统镜像
         Self::open(Arc::clone(&block_device))
     }
 

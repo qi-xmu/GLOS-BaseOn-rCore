@@ -3,6 +3,8 @@ mod inode;
 mod pipe;
 mod stdio;
 
+mod test; // 测试
+
 use crate::mm::UserBuffer;
 use alloc::sync::Arc;
 
@@ -44,6 +46,7 @@ pub trait File: Send + Sync {
 }
 
 pub use dir::{DirEntry, DT_DIR, DT_REG, DT_UNKNOWN};
-pub use inode::{list_apps, open, DiskInodeType, OSInode, OpenFlags};
+pub use inode::{list_apps, open, DiskInodeType, OSInode, OpenFlags, ROOT_INODE};
 pub use pipe::{make_pipe, Pipe};
 pub use stdio::{Stdin, Stdout};
+pub use test::read_test;

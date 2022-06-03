@@ -93,8 +93,8 @@ lazy_static! {
     pub static ref INITPROC: Arc<TaskControlBlock> = Arc::new({
         let inode = open(
             "/",
-            // "initproc",// testing
-            "getcwd",
+            "initproc",// testing
+            // "getcwd",
             OpenFlags::RDONLY,
             crate::fs::DiskInodeType::File,
         )

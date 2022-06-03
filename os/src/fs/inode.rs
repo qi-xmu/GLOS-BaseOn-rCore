@@ -7,7 +7,7 @@ use lazy_static::*;
 use spin::Mutex;
 
 use super::{DirEntry, File, DT_DIR, DT_REG, DT_UNKNOWN};
-use FAT32::{FAT32Manager, VFile, ATTRIBUTE_ARCHIVE, ATTRIBUTE_DIRECTORY};
+use fat32::{FAT32Manager, VFile, ATTRIBUTE_ARCHIVE, ATTRIBUTE_DIRECTORY};
 
 pub enum DiskInodeType {
     File,
@@ -158,7 +158,9 @@ impl OSInode {
 
 lazy_static! {
     pub static ref ROOT_INODE: Arc<VFile> = {
+        #[cfg(feature = "board_k210")]
         println!("open fat32 start");
+
         let fat32_manager = FAT32Manager::open(BLOCK_DEVICE.clone());
         let manager_reader = fat32_manager.read();
         Arc::new(manager_reader.get_root_vfile(&fat32_manager))
