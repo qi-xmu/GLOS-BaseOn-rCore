@@ -1,5 +1,3 @@
-// #![deny(missing_docs)]
-// #![deny(warnings)]
 #![no_std]
 #![no_main]
 #![feature(panic_info_message)]
@@ -10,12 +8,12 @@ extern crate alloc;
 #[macro_use]
 extern crate bitflags;
 
-// #[cfg(feature = "board_k210")]
-// #[path = "boards/k210.rs"]
-// mod board;
-// #[cfg(not(any(feature = "board_k210")))]
-// #[path = "boards/qemu.rs"]
-// mod board;
+#[cfg(feature = "board_k210")]
+#[path = "boards/k210.rs"]
+mod board;
+#[cfg(not(any(feature = "board_k210")))]
+#[path = "boards/qemu.rs"]
+mod board;
 
 #[macro_use]
 mod console;
@@ -46,10 +44,10 @@ fn clear_bss() {
     }
 }
 
-#[no_mangle]
 /// the rust entry-point of os
+#[no_mangle]
 pub fn rust_main() -> ! {
-    clear_bss();
+    clear_bss(); // 清除数据段
     println!("[kernel] Hello, world!");
     mm::init();
     mm::remap_test();

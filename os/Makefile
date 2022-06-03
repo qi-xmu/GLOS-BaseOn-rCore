@@ -1,7 +1,6 @@
 # Building
 include ../Makefile.in
 
-
 # BOARD
 BOARD ?= qemu
 SBI ?= rustsbi
@@ -40,8 +39,6 @@ else ifeq ($(BOARD), k210)
 	(which last-k210) || (rm -f last-qemu && touch last-k210 && make clean)
 endif
 
-
-	
 env:
 	(rustup target list | grep "riscv64gc-unknown-none-elf (installed)") || rustup target add $(TARGET)
 	cargo install cargo-binutils --vers =0.3.3
@@ -77,6 +74,8 @@ ifeq ($(BOARD),qemu)
 		-machine virt \
 		-nographic \
 		-bios $(BOOTLOADER) \
+		-drive file=$(FS_IMG),if=none,format=raw,id=x0 \
+		-device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0 \
 		-device loader,file=$(KERNEL_BIN),addr=$(KERNEL_ENTRY_PA)
 else
 	(which $(K210-BURNER)) || (cd .. && git clone https://github.com/sipeed/kflash.py.git && mv kflash.py tools)
