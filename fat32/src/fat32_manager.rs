@@ -2,7 +2,7 @@ use super::{
     get_block_cache, get_info_cache, set_start_sec, write_to_dev, BlockDevice, CacheMode, FSInfo,
     FatBS, FatExtBS, FAT,
 };
-use crate::{layout::*, VFile};
+use crate::{layout::*, println, VFile};
 use alloc::string::String;
 use alloc::sync::Arc;
 use alloc::vec::Vec;
@@ -59,7 +59,7 @@ impl FAT32Manager {
 
     /// 给定簇的第一个扇区
     pub fn first_sector_of_cluster(&self, cluster: u32) -> usize {
-        //println!("first_sector_of_cluster: cluster = {}", cluster);
+        println!("first_sector_of_cluster: cluster = {}", cluster);
         (cluster as usize - 2) * self.sectors_per_cluster as usize + self.root_sec as usize
     }
 

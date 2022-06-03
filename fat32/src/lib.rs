@@ -11,13 +11,16 @@ extern crate alloc;
 // FAT2: 6-9 sector
 // DirEntry: 10-21 sector
 // Data: 22-8191 sector
-
 mod block_cache;
 mod block_dev;
 mod fat32_manager;
 mod layout;
+mod sbi;
 mod utils;
 mod vfs;
+
+#[macro_use]
+mod console;
 
 pub const BLOCK_SZ: usize = 512;
 pub const SECTOR_SIZE: usize = 8192;
