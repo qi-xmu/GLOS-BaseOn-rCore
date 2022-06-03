@@ -17,3 +17,4 @@ easy-fs-fuse/target/*
 tools/
 pushall.sh
 .vscode
+fat32-fuse

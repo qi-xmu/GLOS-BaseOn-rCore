@@ -10,7 +10,8 @@ GDB := riscv64-unknown-elf-gdb
 
 DISASM_TMP := target/$(TARGET)/$(MODE)/asm
 
-FS_IMG := ../user/target/$(TARGET)/$(MODE)/fs.img
+# FS_IMG := ../user/target/$(TARGET)/$(MODE)/fs.img
+FS_IMG := ../fat32-fuse/fs.img
 
 APPS := user/src/bin/*
 SDCARD := /dev/sda
