@@ -1,2 +1,0 @@
-# Hashes of file build rules.
-dc76fc86df4660861e5142df912e5906 syscall_ids.h
