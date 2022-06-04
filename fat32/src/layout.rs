@@ -103,10 +103,10 @@ impl FatBS {
 
     /// 第一个FAT表所在的扇区
     pub fn first_fat_sector(&self) -> u32 {
-        println!(
-            "\x1b[31m[fat] reser_fat-sec {} \x1b[0m",
-            self.reserved_sector_count as u32
-        );
+        // println!(
+        //     "\x1b[31m[fat] reser_fat-sec {} \x1b[0m",
+        //     self.reserved_sector_count as u32
+        // );
         self.reserved_sector_count as u32
     }
 }

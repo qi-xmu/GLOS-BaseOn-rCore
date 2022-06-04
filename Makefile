@@ -24,5 +24,6 @@ clean:
 vfs: 
 	sudo ./makefs.sh
 
-fs: $(FS_IMG)
+fs: 
+	./user/build-oscomp.sh
 	./makesd.sh $(SDCARD) $(TMP_MOUNT) $(USER_BIN)

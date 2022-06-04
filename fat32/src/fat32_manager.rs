@@ -60,15 +60,15 @@ impl FAT32Manager {
 
     /// 给定簇的第一个扇区
     pub fn first_sector_of_cluster(&self, cluster: u32) -> usize {
-        println!("first_sector_of_cluster: cluster = {}", cluster);
+        // println!("first_sector_of_cluster: cluster = {}", cluster);
         (cluster as usize - 2) * self.sectors_per_cluster as usize + self.root_sector as usize
     }
 
     /// 打开现有的FAT32
     pub fn open(block_device: Arc<dyn BlockDevice>) -> Arc<RwLock<Self>> {
         // 读入分区偏移
-        println!("[fs]: Load FAT32");
-        // 这个地方
+        // println!("[fs]: Load FAT32");
+        // 0x1c6 存放起始扇区号 https://www.cnblogs.com/brucemengbm/p/7258268.html
         let start_sector: u32 = get_info_cache(0, Arc::clone(&block_device), CacheMode::READ)
             .read()
             .read(0x1c6, |ssec_bytes: &[u8; 4]| {
@@ -79,7 +79,6 @@ impl FAT32Manager {
                 }
                 start_sector
             });
-        println!("[fs ss]{}", start_sector);
         set_start_sec(start_sector as usize); // block cache
 
         // 读入 Boot Sector DBR分区
@@ -87,7 +86,7 @@ impl FAT32Manager {
         let boot_sector: FatBS = get_info_cache(0, block_device.clone(), CacheMode::READ)
             .read()
             .read(0, |bs: &FatBS| *bs);
-        println!("{:?}", boot_sector);
+        // println!("{:?}", boot_sector);
 
         // 扩展 DBR分区
         // 读入 Extended Boot Sector
@@ -96,7 +95,7 @@ impl FAT32Manager {
             .read(36, |ebs: &FatExtBS| {
                 *ebs // DEBUG
             });
-        println!("{:?}", ext_boot_sec);
+        // println!("{:?}", ext_boot_sec);
 
         // 读入 FSInfo
         let fsinfo = FSInfo::new(ext_boot_sec.fat_info_sec());

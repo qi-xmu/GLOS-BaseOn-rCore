@@ -177,7 +177,7 @@ impl FAT {
         loop {
             count += 1;
             let next_cluster = self.get_next_cluster(curr_cluster, block_device.clone());
-            println!("next_cluster = {:X}", next_cluster);
+            // println!("next_cluster = {:X}", next_cluster);
             if next_cluster >= END_CLUSTER || next_cluster > 0xF000000 {
                 return count;
             } else {

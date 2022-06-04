@@ -151,8 +151,6 @@ impl OSInode {
 
 lazy_static! {
     pub static ref ROOT_VFILE: Arc<VFile> = {
-        #[cfg(feature = "board_k210")]
-        println!("open fat32 start");
         let fat32_manager = FAT32Manager::open(BLOCK_DEVICE.clone()); // 打开设备
         let manager_reader = fat32_manager.read();
         Arc::new(manager_reader.get_root_vfile(&fat32_manager))
@@ -193,43 +191,6 @@ impl OpenFlags {
         }
     }
 }
-
-// pub fn open_file(name: &str, flags: OpenFlags) -> Option<Arc<OSInode>> {
-//     let (readable, writable) = flags.read_write();
-//     if flags.contains(OpenFlags::CREATE) {
-//         if let Some(inode) = ROOT_INODE.find(name) {
-//             // clear size
-//             inode.clear();
-//             Some(Arc::new(OSInode::new(
-//                 readable,
-//                 writable,
-//                 inode,
-//             )))
-//         } else {
-//             // create file
-//             ROOT_INODE.create(name)
-//                 .map(|inode| {
-//                     Arc::new(OSInode::new(
-//                         readable,
-//                         writable,
-//                         inode,
-//                     ))
-//                 })
-//         }
-//     } else {
-//         ROOT_INODE.find(name)
-//             .map(|inode| {
-//                 if flags.contains(OpenFlags::TRUNC) {
-//                     inode.clear();
-//                 }
-//                 Arc::new(OSInode::new(
-//                     readable,
-//                     writable,
-//                     inode
-//                 ))
-//             })
-//     }
-// }
 
 pub fn open(
     work_path: &str,
