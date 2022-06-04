@@ -32,6 +32,7 @@ pub mod trap;
 use core::arch::global_asm;
 
 global_asm!(include_str!("entry.asm"));
+global_asm!(include_str!("load_default_app.asm"));
 /// clear BSS segment
 fn clear_bss() {
     extern "C" {

@@ -148,7 +148,7 @@ impl VFile {
         let mut step: usize = long_ent_num;
         for i in (long_ent_num - 2)..0 {
             if name_last == name_vec[i] {
-                // step = step - i - 1;
+                step = step - i - 1;
                 break;
             }
         }
