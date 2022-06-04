@@ -1,6 +1,6 @@
 include Makefile.in
 
-.PHONY: run build fs clean sdcard
+.PHONY: run build fs vfs clean qemu
 
 all: build 
 
@@ -11,6 +11,9 @@ build:
 
 run:
 	cd os && make run BOARD=k210
+
+qemu:
+	cd os && make run
 
 clean:
 	rm ./user/target -rf
