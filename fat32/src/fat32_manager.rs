@@ -14,10 +14,10 @@ pub struct FAT32Manager {
     sectors_per_cluster: u32,
     bytes_per_sector: u32,
     bytes_per_cluster: u32,
-    fat: Arc<RwLock<FAT>>,
-    root_sec: u32, // 根扇区 一般为2
+    root_sector: u32, // 根扇区 一般为2
     #[allow(unused)]
     total_sectors: u32, //总扇区数
+    fat: Arc<RwLock<FAT>>,
     vroot_dirent: Arc<RwLock<ShortDirEntry>>,
 }
 
@@ -55,29 +55,39 @@ impl FAT32Manager {
 
     /// 第一个数据簇的扇区
     pub fn first_data_sector(&self) -> u32 {
-        self.root_sec
+        self.root_sector
     }
 
     /// 给定簇的第一个扇区
     pub fn first_sector_of_cluster(&self, cluster: u32) -> usize {
         println!("first_sector_of_cluster: cluster = {}", cluster);
-        (cluster as usize - 2) * self.sectors_per_cluster as usize + self.root_sec as usize
+        (cluster as usize - 2) * self.sectors_per_cluster as usize + self.root_sector as usize
     }
 
     /// 打开现有的FAT32
     pub fn open(block_device: Arc<dyn BlockDevice>) -> Arc<RwLock<Self>> {
         // 读入分区偏移
         println!("[fs]: Load FAT32");
-
-        let start_sector = 0;
+        // 这个地方
+        let start_sector: u32 = get_info_cache(0, Arc::clone(&block_device), CacheMode::READ)
+            .read()
+            .read(0x1c6, |ssec_bytes: &[u8; 4]| {
+                let mut start_sector: u32 = 0;
+                for i in 0..4 {
+                    let tmp = ssec_bytes[i] as u32;
+                    start_sector = start_sector + (tmp << (8 * i));
+                }
+                start_sector
+            });
+        println!("[fs ss]{}", start_sector);
         set_start_sec(start_sector as usize); // block cache
 
         // 读入 Boot Sector DBR分区
         // Arc::clone(&T) = T.clone()
-        let boot_sec: FatBS = get_info_cache(0, block_device.clone(), CacheMode::READ)
+        let boot_sector: FatBS = get_info_cache(0, block_device.clone(), CacheMode::READ)
             .read()
             .read(0, |bs: &FatBS| *bs);
-        println!("{:?}", boot_sec);
+        println!("{:?}", boot_sector);
 
         // 扩展 DBR分区
         // 读入 Extended Boot Sector
@@ -97,13 +107,13 @@ impl FAT32Manager {
         );
 
         // 基础信息
-        let sectors_per_cluster = boot_sec.sectors_per_cluster as u32;
-        let bytes_per_sector = boot_sec.bytes_per_sector as u32;
+        let sectors_per_cluster = boot_sector.sectors_per_cluster as u32;
+        let bytes_per_sector = boot_sector.bytes_per_sector as u32;
         let bytes_per_cluster = sectors_per_cluster * bytes_per_sector;
 
         // 读取FAT表信息
         let fat_n_sec = ext_boot_sec.fat_size(); // fat表的大小
-        let fat1_sector = boot_sec.first_fat_sector(); // fat1 扇区起始位置
+        let fat1_sector = boot_sector.first_fat_sector(); // fat1 扇区起始位置
         let fat2_sector = fat1_sector + fat_n_sec; // fat2 扇区起始位置
 
         // FAT32中把簇是以32bit（4个字节）进行编码
@@ -114,7 +124,7 @@ impl FAT32Manager {
 
         // 根目录地址 = 保留扇区数 + 所有FAT表的扇区数
         let root_sec =
-            boot_sec.table_count as u32 * fat_n_sec + boot_sec.reserved_sector_count as u32;
+            boot_sector.table_count as u32 * fat_n_sec + boot_sector.reserved_sector_count as u32;
 
         // 初始化root_dirent 这里按理说应该是读取，这里之间自行定义
         let mut root_dirent = ShortDirEntry::new(
@@ -131,8 +141,8 @@ impl FAT32Manager {
             bytes_per_sector,
             bytes_per_cluster,
             fat: Arc::new(RwLock::new(fat)), // 读写锁
-            root_sec,
-            total_sectors: boot_sec.total_sectors(),
+            root_sector: root_sec,
+            total_sectors: boot_sector.total_sectors(),
             vroot_dirent: Arc::new(RwLock::new(root_dirent)),
         };
         Arc::new(RwLock::new(fat32_manager))
@@ -146,7 +156,6 @@ impl FAT32Manager {
             0,
             long_pos_vec,
             ATTRIBUTE_DIRECTORY,
-            0,
             fs_manager.clone(),
             self.block_device.clone(),
         )
@@ -234,7 +243,7 @@ impl FAT32Manager {
     }
 
     pub fn get_fat(&self) -> Arc<RwLock<FAT>> {
-        Arc::clone(&self.fat)
+        self.fat.clone()
     }
 
     /// 计算扩大至new_size(B)需要多少个簇

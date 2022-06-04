@@ -144,16 +144,15 @@ impl OSInode {
 
     pub fn get_size(&self) -> usize {
         let inner = self.inner.lock();
-        let (size, _, mt_me, _, _) = inner.inode.stat();
+        let (size, _, _, _, _) = inner.inode.stat();
         return size as usize;
     }
 }
 
 lazy_static! {
-    pub static ref ROOT_INODE: Arc<VFile> = {
+    pub static ref ROOT_VFILE: Arc<VFile> = {
         #[cfg(feature = "board_k210")]
         println!("open fat32 start");
-
         let fat32_manager = FAT32Manager::open(BLOCK_DEVICE.clone()); // 打开设备
         let manager_reader = fat32_manager.read();
         Arc::new(manager_reader.get_root_vfile(&fat32_manager))
@@ -162,10 +161,8 @@ lazy_static! {
 
 pub fn list_apps() {
     println!("/**** APPS ****/");
-    for app in ROOT_INODE.ls().unwrap() {
-        if app.1 & ATTRIBUTE_DIRECTORY == 0 {
-            println!("{}", app.0);
-        }
+    for (name, _) in ROOT_VFILE.ls().unwrap() {
+        println!("{}", name);
     }
     println!("**************/");
 }
@@ -243,10 +240,10 @@ pub fn open(
     // 找到当前路径的inode(file, directory)
     let cur_inode = {
         if work_path == "/" {
-            ROOT_INODE.clone()
+            ROOT_VFILE.clone()
         } else {
             let wpath: Vec<&str> = work_path.split('/').collect();
-            ROOT_INODE.find_vfile_bypath(wpath).unwrap()
+            ROOT_VFILE.find_vfile_bypath(wpath).unwrap()
         }
     };
     let mut pathv: Vec<&str> = path.split('/').collect();

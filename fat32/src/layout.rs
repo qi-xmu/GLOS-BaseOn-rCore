@@ -4,6 +4,7 @@ use crate::{println, FAT};
 use super::{
     fat32_manager::FAT32Manager, get_block_cache, get_info_cache, BlockDevice, CacheMode, BLOCK_SZ,
 };
+use alloc::format;
 use alloc::string::String;
 use alloc::sync::Arc;
 use spin::RwLock;
@@ -21,7 +22,7 @@ pub const END_CLUSTER: u32 = 0x0FFFFFF8;
 // 如果某个簇存在坏扇区，则整个簇会用0xFFFFFF7标记为坏簇，这个坏簇标记就记录在它所对应的FAT表项中
 pub const BAD_CLUSTER: u32 = 0x0FFFFFF7;
 // 每一个sector 的 entry
-pub const FATENTRY_PER_SEC: u32 = BLOCK_SZ as u32 / 4;
+pub const FATENTRY_PER_SEC: u32 = BLOCK_SZ as u32 / 4; // 128
 
 // 0000_0000 读写
 #[allow(unused)]
@@ -31,12 +32,12 @@ pub const ATTRIBUTE_SYSTEM: u8 = 0x04; // 0000_0100 系统
 pub const ATTRIBUTE_VOLUME_ID: u8 = 0x08; // 0000_1000 卷标
 pub const ATTRIBUTE_DIRECTORY: u8 = 0x10; // 0001_0000 目录
 pub const ATTRIBUTE_ARCHIVE: u8 = 0x20; // 0010_0000 归档
-pub const ATTRIBUTE_LFN: u8 = 0x0F;
+pub const ATTRIBUTE_LFN: u8 = 0x0F; // 0000_1111 长目录标志
 
 #[allow(unused)]
 pub const DIRENT_SZ: usize = 32;
-pub const SHORT_NAME_LEN: u32 = 8;
-pub const SHORT_EXT_LEN: u32 = 3;
+pub const SHORT_NAME_LEN: usize = 8;
+pub const SHORT_EXT_LEN: usize = 3;
 pub const LONG_NAME_LEN: u32 = 13;
 
 pub const ALL_UPPER_CASE: u8 = 0x00;
@@ -455,27 +456,29 @@ impl ShortDirEntry {
     }
 
     pub fn get_name_lowercase(&self) -> String {
-        let mut name: String = String::new();
-        for i in 0..8 {
-            // 记录文件名
-            if self.name[i] == 0x20 {
-                break;
-            } else {
-                name.push((self.name[i] as char).to_ascii_lowercase());
-            }
+        // 获取名字长度
+        let name_len = (0usize..SHORT_NAME_LEN)
+            .find(|i| self.name[*i] == 0x20u8)
+            .unwrap_or(SHORT_NAME_LEN);
+        // 名字
+        let name = core::str::from_utf8(&self.name[..name_len]).unwrap();
+
+        // 获取扩展的长度
+        let ext_len = (0usize..SHORT_EXT_LEN)
+            .find(|i| self.extension[*i] == 0x20)
+            .unwrap_or(SHORT_EXT_LEN);
+        // 扩展名
+        let extension = core::str::from_utf8(&self.extension[0..ext_len]).unwrap();
+        // 组合
+        if ext_len == 0 {
+            String::from(name).to_ascii_lowercase()
+        } else {
+            format!(
+                "{}.{}",
+                name.to_ascii_lowercase(),
+                extension.to_ascii_lowercase()
+            )
         }
-        for i in 0..3 {
-            // 记录扩展名
-            if self.extension[i] == 0x20 {
-                break;
-            } else {
-                if i == 0 {
-                    name.push('.');
-                }
-                name.push((self.extension[i] as char).to_ascii_lowercase());
-            }
-        }
-        name
     }
 
     /// 计算校验和
@@ -581,13 +584,12 @@ impl ShortDirEntry {
         if current_off >= end {
             return 0;
         }
-        let (c_clu, c_sec, _) =
-            self.get_pos(offset, manager, &manager_reader.get_fat(), block_device);
-        if c_clu >= END_CLUSTER {
+        let (curr_clu, curr_sec, _) = self.get_pos(offset, manager, fat, block_device);
+        if curr_clu >= END_CLUSTER {
             return 0;
         };
-        let mut current_cluster = c_clu;
-        let mut current_sector = c_sec;
+        let mut current_cluster = curr_clu;
+        let mut current_sector = curr_sec;
 
         let mut read_size = 0usize;
         loop {
@@ -908,30 +910,26 @@ impl LongDirEntry {
     }
 
     pub fn get_name_format(&self) -> String {
-        let mut name = String::new();
-        let mut c: u8;
-        for i in 0..5 {
-            c = self.name1[i << 1];
-            if c == 0 {
-                return name;
-            }
-            name.push(c as char);
-        }
-        for i in 0..6 {
-            c = self.name2[i << 1];
-            if c == 0 {
-                return name;
-            }
-            name.push(c as char);
-        }
-        for i in 0..2 {
-            c = self.name3[i << 1];
-            if c == 0 {
-                return name;
-            }
-            name.push(c as char);
-        }
-        return name;
+        // 拼接文件名 // 过滤 FF 和 00
+        let name1: String = self
+            .name1
+            .iter()
+            .filter(|x| **x != 0xFF && **x != 0)
+            .map(|x| *x as char)
+            .collect();
+        let name2: String = self
+            .name2
+            .iter()
+            .filter(|x| **x != 0xFF && **x != 0)
+            .map(|x| *x as char)
+            .collect();
+        let name3: String = self
+            .name3
+            .iter()
+            .filter(|x| **x != 0xFF && **x != 0)
+            .map(|x| *x as char)
+            .collect();
+        format!("{}{}{}", name1, name2, name3)
     }
 
     #[allow(unused)]

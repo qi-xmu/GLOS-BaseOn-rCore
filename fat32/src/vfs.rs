@@ -7,12 +7,11 @@ use spin::RwLock;
 // 虚拟文件系统和物理文件系统互为映射
 #[derive(Clone)]
 pub struct VFile {
-    pub name: String,
-    pub short_sector: usize,
+    name: String,
+    pub short_sector: usize,               // 是否缓冲，如果缓冲，记录块号
     pub short_offset: usize,               // 文件短目录项所在扇区和偏移
     pub long_pos_vec: Vec<(usize, usize)>, // 长目录项的位置<sector, offset>
-    pub attribute: u8,                     // 类型
-    size: u32,                             // 文件长度
+    attribute: u8,                         // 类型
     fs: Arc<RwLock<FAT32Manager>>,
     block_device: Arc<dyn BlockDevice>,
 }
@@ -30,7 +29,7 @@ impl VFile {
         short_offset: usize,
         long_pos_vec: Vec<(usize, usize)>,
         attribute: u8,
-        size: u32,
+        // size: u32,
         fs: Arc<RwLock<FAT32Manager>>,
         block_device: Arc<dyn BlockDevice>,
     ) -> Self {
@@ -39,9 +38,7 @@ impl VFile {
             short_sector,
             short_offset,
             long_pos_vec,
-            //first_cluster,
             attribute,
-            size,
             fs,
             block_device,
         }
@@ -78,13 +75,19 @@ impl VFile {
             false
         }
     }
+
+    // 获取文件的起始簇
+    pub fn first_cluster(&self) -> u32 {
+        self.read_short_dirent(|se: &ShortDirEntry| se.first_cluster())
+    }
+
     // 读取 dir parent
     pub fn read_short_dirent<V>(&self, f: impl FnOnce(&ShortDirEntry) -> V) -> V {
         if self.short_sector == 0 {
             // 没有缓冲
             let root_dirent = self.fs.read().get_root_dirent();
-            let rr = root_dirent.read();
-            f(&rr)
+            let root_dirent_reader = root_dirent.read();
+            f(&root_dirent_reader)
         } else {
             // 已经缓冲
             get_info_cache(
@@ -95,13 +98,6 @@ impl VFile {
             .read()
             .read(self.short_offset, f)
         }
-    }
-
-    fn modify_long_dirent<V>(&self, index: usize, f: impl FnOnce(&mut LongDirEntry) -> V) -> V {
-        let (sector, offset) = self.long_pos_vec[index];
-        get_info_cache(sector, self.block_device.clone(), CacheMode::READ)
-            .write()
-            .modify(offset, f)
     }
 
     pub fn modify_short_dirent<V>(&self, f: impl FnOnce(&mut ShortDirEntry) -> V) -> V {
@@ -121,7 +117,15 @@ impl VFile {
         }
     }
 
+    pub fn modify_long_dirent<V>(&self, index: usize, f: impl FnOnce(&mut LongDirEntry) -> V) -> V {
+        let (sector, offset) = self.long_pos_vec[index];
+        get_info_cache(sector, self.block_device.clone(), CacheMode::READ)
+            .write()
+            .modify(offset, f)
+    }
+
     /* 返回sector和offset */
+    // 获取短文件名目录项所在的扇区和偏移
     pub fn get_pos(&self, offset: usize) -> (usize, usize) {
         let (_, sec, off) = self.read_short_dirent(|s_ent: &ShortDirEntry| {
             s_ent.get_pos(
@@ -221,9 +225,7 @@ impl VFile {
                             short_sector,
                             short_offset,
                             long_pos_vec,
-                            //short_ent.first_cluster(),
                             short_ent.attribute(),
-                            short_ent.get_size(),
                             self.fs.clone(),
                             self.block_device.clone(),
                         ));
@@ -267,7 +269,6 @@ impl VFile {
                         short_offset,
                         long_pos_vec,
                         short_ent.attribute(),
-                        short_ent.get_size(),
                         self.fs.clone(),
                         self.block_device.clone(),
                     ));
@@ -385,13 +386,11 @@ impl VFile {
         }
     }
 
-    /*
-    pub fn set_first_cluster(&mut self, first_cluster:u32) {
-        self.first_cluster = first_cluster;
-        self.modify_short_dirent(|se:&mut ShortDirEntry|{
-            se.set_first_cluster(first_cluster);
+    pub fn set_first_cluster(&self, cluster: u32) {
+        self.modify_short_dirent(|short_ent| {
+            short_ent.set_first_cluster(cluster);
         });
-    }*/
+    }
 
     /// 在当前目录下创建文件
     pub fn create(&self, name: &str, attribute: u8) -> Option<Arc<VFile>> {
@@ -471,10 +470,6 @@ impl VFile {
         }
     }
 
-    pub fn first_cluster(&self) -> u32 {
-        self.read_short_dirent(|se: &ShortDirEntry| se.first_cluster())
-    }
-
     /* 获取当前目录下的所有文件名以及属性，以Vector形式返回 */
     // 如果出现错误，返回None
     pub fn ls(&self) -> Option<Vec<(String, u8)>> {
@@ -482,7 +477,6 @@ impl VFile {
             return None;
         }
         let mut list: Vec<(String, u8)> = Vec::new();
-        // DEBUG
         let mut offset: usize = 0;
         let mut short_ent = ShortDirEntry::empty();
         loop {
@@ -516,9 +510,8 @@ impl VFile {
                 } else {
                     order = order ^ 0x40;
                 }
-                let mut name = long_ent.get_name_raw();
-                #[allow(unused)]
-                for i in 1..order as usize {
+                let mut name = long_ent.get_name_format();
+                for _ in 1..order as usize {
                     offset += DIRENT_SZ;
                     read_sz = self.read_short_dirent(|curr_ent: &ShortDirEntry| {
                         curr_ent.read_at(
@@ -533,8 +526,9 @@ impl VFile {
                         return Some(list);
                     }
                     // 若无误，把该段名字放在name最前
-                    name.insert_str(0, long_ent.get_name_raw().as_str());
+                    name.insert_str(0, long_ent.get_name_format().as_str());
                 }
+
                 // 从短文件获取类型
                 offset += DIRENT_SZ;
                 read_sz = self.read_short_dirent(|curr_ent: &ShortDirEntry| {
@@ -659,9 +653,11 @@ impl VFile {
                     &self.block_device,
                 )
             });
+            // 不是目录项
             if read_sz != DIRENT_SZ || long_ent.is_empty() {
                 return Some(list);
             }
+            // 已经删除了
             if long_ent.is_deleted() {
                 offset += DIRENT_SZ;
                 is_long = false;
@@ -669,7 +665,7 @@ impl VFile {
             }
             // 名称拼接
             if long_ent.attribute() != ATTRIBUTE_LFN {
-                // 短文件名
+                // 短文件名 将long_ent 对其到 short_ent
                 let (_, se_array, _) =
                     unsafe { long_ent.as_bytes_mut().align_to_mut::<ShortDirEntry>() };
                 let short_ent = se_array[0];

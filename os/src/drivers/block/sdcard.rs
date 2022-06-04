@@ -317,7 +317,7 @@ impl</*'a,*/ X: SPI> SDCard</*'a,*/ X> {
             timeout -= 1;
         }
         /* After time out */
-        return 0xFF;
+        0xFF
     }
 
     /*
@@ -345,7 +345,7 @@ impl</*'a,*/ X: SPI> SDCard</*'a,*/ X> {
             self.read_data(response);
         }
         /* Return response */
-        return 0;
+        0
     }
 
     /*
@@ -724,9 +724,8 @@ lazy_static! {
 }
 
 fn init_sdcard() -> SDCard<SPIImpl<SPI0>> {
-    // wait previous output
-    // usleep(100000);
-    println!("[sdcard] init sdcard start!");
+    usleep(100000);
+    println!("\x1b[31m[sdcard] init sdcard \x1b[0m");
     let peripherals = unsafe { Peripherals::steal() };
     sysctl::pll_set_freq(sysctl::pll::PLL0, 800_000_000).unwrap();
     sysctl::pll_set_freq(sysctl::pll::PLL1, 300_000_000).unwrap();

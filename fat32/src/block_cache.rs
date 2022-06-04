@@ -71,12 +71,6 @@ impl Drop for BlockCache {
     }
 }
 
-// 0-info扇区
-// 1-2 FAT1
-// 3-4 FAT2
-// 5-7 DirEntry
-// 8-19 DATA
-
 const BLOCK_CACHE_SIZE: usize = 10;
 pub struct BlockCacheManager {
     start_sec: usize,

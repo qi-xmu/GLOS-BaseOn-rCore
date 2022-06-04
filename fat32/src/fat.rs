@@ -9,10 +9,10 @@ use crate::{
 #[allow(unused)]
 #[derive(Clone, Copy)]
 pub struct FAT {
-    fat1_sector: u32, //FAT1和FAT2的起始扇区
-    fat2_sector: u32,
-    n_sectors: u32, //大小
-    n_entry: u32,   //表项数量
+    fat1_sector: u32, // FAT1的起始扇区
+    fat2_sector: u32, // FAT2的起始扇区
+    n_sectors: u32,   // 大小
+    n_entry: u32,     // 表项数量
 }
 
 impl FAT {
@@ -29,7 +29,6 @@ impl FAT {
     fn calculate_pos(&self, cluster: u32) -> (u32, u32, u32) {
         // 返回sector号和offset
         // 前为FAT1的扇区号，后为FAT2的扇区号，最后为offset
-        // DEBUG
         let fat1_sec = self.fat1_sector + cluster / FATENTRY_PER_SEC;
         let fat2_sec = self.fat2_sector + cluster / FATENTRY_PER_SEC;
         let offset = 4 * (cluster % FATENTRY_PER_SEC);
@@ -43,7 +42,6 @@ impl FAT {
         current_cluster: u32,
         block_device: Arc<dyn BlockDevice>,
     ) -> u32 {
-        // DEBUG
         let mut curr_cluster = current_cluster + 1;
         loop {
             #[allow(unused)]
