@@ -30,7 +30,7 @@ OBJCOPY := rust-objcopy --binary-architecture=riscv64
 # Disassembly
 DISASM ?= -x
 
-build: env switch-check $(KERNEL_BIN)
+build: switch-check $(KERNEL_BIN)
 
 switch-check:
 ifeq ($(BOARD), qemu)
@@ -78,7 +78,7 @@ ifeq ($(BOARD),qemu)
 		-device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0 \
 		-device loader,file=$(KERNEL_BIN),addr=$(KERNEL_ENTRY_PA)
 else
-	(which $(K210-BURNER)) || (cd .. && git clone https://github.com/sipeed/kflash.py.git && mv kflash.py tools)
+	# (which $(K210-BURNER)) || (cd .. && git clone https://github.com/sipeed/kflash.py.git && mv kflash.py tools)
 	@cp $(BOOTLOADER) $(BOOTLOADER).copy
 	@dd if=$(KERNEL_BIN) of=$(BOOTLOADER).copy bs=$(K210_BOOTLOADER_SIZE) seek=1
 	@mv $(BOOTLOADER).copy $(KERNEL_BIN)

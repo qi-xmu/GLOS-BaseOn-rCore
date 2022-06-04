@@ -3,8 +3,6 @@ use alloc::collections::VecDeque;
 use alloc::sync::Arc;
 use lazy_static::*;
 use spin::RwLock;
-#[allow(unused)]
-// use riscv::register::time;
 
 pub struct BlockCache {
     pub cache: [u8; BLOCK_SZ],

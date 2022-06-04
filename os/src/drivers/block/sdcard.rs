@@ -502,7 +502,7 @@ impl</*'a,*/ X: SPI> SDCard</*'a,*/ X> {
         };
         info.CardBlockSize = 1 << u64::from(info.SD_csd.RdBlockLen);
         info.CardCapacity = (u64::from(info.SD_csd.DeviceSize) + 1) * 1024 * info.CardBlockSize;
-
+        println!("{:?}", info);
         Ok(info)
     }
 

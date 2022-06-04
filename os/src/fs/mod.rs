@@ -49,4 +49,4 @@ pub use dir::{DirEntry, DT_DIR, DT_REG, DT_UNKNOWN};
 pub use inode::{list_apps, open, DiskInodeType, OSInode, OpenFlags, ROOT_INODE};
 pub use pipe::{make_pipe, Pipe};
 pub use stdio::{Stdin, Stdout};
-pub use test::read_test;
+// pub use test::read_test;

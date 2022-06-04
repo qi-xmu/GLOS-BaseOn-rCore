@@ -149,19 +149,12 @@ impl OSInode {
     }
 }
 
-// lazy_static! {
-//     pub static ref ROOT_INODE: Arc<Inode> = {
-//         let efs = EasyFileSystem::open(BLOCK_DEVICE.clone());
-//         Arc::new(EasyFileSystem::root_inode(&efs))
-//     };
-// }
-
 lazy_static! {
     pub static ref ROOT_INODE: Arc<VFile> = {
         #[cfg(feature = "board_k210")]
         println!("open fat32 start");
 
-        let fat32_manager = FAT32Manager::open(BLOCK_DEVICE.clone());
+        let fat32_manager = FAT32Manager::open(BLOCK_DEVICE.clone()); // 打开设备
         let manager_reader = fat32_manager.read();
         Arc::new(manager_reader.get_root_vfile(&fat32_manager))
     };
@@ -169,7 +162,7 @@ lazy_static! {
 
 pub fn list_apps() {
     println!("/**** APPS ****/");
-    for app in ROOT_INODE.ls_lite().unwrap() {
+    for app in ROOT_INODE.ls().unwrap() {
         if app.1 & ATTRIBUTE_DIRECTORY == 0 {
             println!("{}", app.0);
         }

@@ -1,3 +1,5 @@
+#![allow(unused)]
+
 pub const CLOCK_FREQ: usize = 403000000 / 62;
 
 pub const MMIO: &[(usize, usize)] = &[
@@ -24,7 +26,6 @@ pub type BlockDeviceImpl = crate::drivers::block::SDCardWrapper;
 pub fn device_init() {
     unimplemented!();
 }
-
 pub fn irq_handler() {
     unimplemented!();
 }

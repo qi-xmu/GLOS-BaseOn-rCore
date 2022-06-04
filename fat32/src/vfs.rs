@@ -1,26 +1,18 @@
-use super::{
-    fat32_manager::*,
-    get_info_cache,
-    layout::*,
-    BlockDevice,
-    CacheMode,
-    // println,
-    // print
-};
+use super::{fat32_manager::*, get_info_cache, layout::*, print, println, BlockDevice, CacheMode};
 use alloc::string::String;
 use alloc::sync::Arc;
 use alloc::vec::Vec;
 use spin::RwLock;
 
+// 虚拟文件系统和物理文件系统互为映射
 #[derive(Clone)]
 pub struct VFile {
     pub name: String,
     pub short_sector: usize,
-    pub short_offset: usize,               //文件短目录项所在扇区和偏移
+    pub short_offset: usize,               // 文件短目录项所在扇区和偏移
     pub long_pos_vec: Vec<(usize, usize)>, // 长目录项的位置<sector, offset>
-    //first_cluster: u32,
-    pub attribute: u8,
-    //size:u32,
+    pub attribute: u8,                     // 类型
+    size: u32,                             // 文件长度
     fs: Arc<RwLock<FAT32Manager>>,
     block_device: Arc<dyn BlockDevice>,
 }
@@ -37,9 +29,8 @@ impl VFile {
         short_sector: usize,
         short_offset: usize,
         long_pos_vec: Vec<(usize, usize)>,
-        //first_cluster: u32,
         attribute: u8,
-        #[allow(unused)] size: u32,
+        size: u32,
         fs: Arc<RwLock<FAT32Manager>>,
         block_device: Arc<dyn BlockDevice>,
     ) -> Self {
@@ -50,7 +41,7 @@ impl VFile {
             long_pos_vec,
             //first_cluster,
             attribute,
-            //size,
+            size,
             fs,
             block_device,
         }
@@ -87,13 +78,15 @@ impl VFile {
             false
         }
     }
-
+    // 读取 dir parent
     pub fn read_short_dirent<V>(&self, f: impl FnOnce(&ShortDirEntry) -> V) -> V {
         if self.short_sector == 0 {
+            // 没有缓冲
             let root_dirent = self.fs.read().get_root_dirent();
             let rr = root_dirent.read();
             f(&rr)
         } else {
+            // 已经缓冲
             get_info_cache(
                 self.short_sector,
                 self.block_device.clone(),
@@ -631,7 +624,7 @@ impl VFile {
                 let fat = fs_reader.get_fat();
                 let fat_reader = fat.read();
                 let cluster_num =
-                    fat_reader.count_claster_num(first_clu, self.block_device.clone());
+                    fat_reader.count_cluster_num(first_clu, self.block_device.clone());
                 size = cluster_num * fs_reader.bytes_per_cluster();
                 //println!("{} {}",cluster_num, fs_reader.bytes_per_cluster());
             }
@@ -644,7 +637,7 @@ impl VFile {
             )
         })
     }
-
+    // TODO
     pub fn ls_lite(&self) -> Option<Vec<(String, u8)>> {
         if !self.is_dir() {
             return None;
@@ -654,6 +647,8 @@ impl VFile {
         let mut offset = 0;
         let mut name = String::new();
         let mut is_long = false;
+
+        // 读取
         loop {
             let read_sz = self.read_short_dirent(|curr_ent: &ShortDirEntry| {
                 curr_ent.read_at(

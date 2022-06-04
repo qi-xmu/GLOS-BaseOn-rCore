@@ -18,3 +18,4 @@ tools/
 pushall.sh
 .vscode
 fat32-fuse
+fat32_fs

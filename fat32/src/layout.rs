@@ -1,89 +1,96 @@
-use crate::utils::bytes_order_u32;
+use crate::utils::clone_into_array;
+use crate::{println, FAT};
 
 use super::{
-    clone_into_array, fat32_manager::FAT32Manager, get_block_cache, get_info_cache, BlockDevice,
-    CacheMode, BLOCK_SZ, FAT_SIZE, SECTOR_SIZE,
+    fat32_manager::FAT32Manager, get_block_cache, get_info_cache, BlockDevice, CacheMode, BLOCK_SZ,
 };
 use alloc::string::String;
 use alloc::sync::Arc;
-use alloc::vec::Vec;
 use spin::RwLock;
 
+// fat info FSI_LeadSig 固定值0x41615252
 pub const LEAD_SIGNATURE: u32 = 0x41615252;
-pub const SECOND_SIGNATURE: u32 = 0x61417272;
+// fat info FSI_StructSig 固定值0x61417272
+pub const STRUCT_SIGNATURE: u32 = 0x61417272;
+// FSI_Free_Count
+// 此值的含义是当前分区free cluster的个数，如果此值为0Xffffffff,那么则说明free cluster的个数是未知的
 pub const FREE_CLUSTER: u32 = 0x00000000;
+// 对于FAT32而言，代表文件结束的FAT表项值为0x0FFFFFFF。
+// 0x0FFFFFF8;FAT表起始固定标识
 pub const END_CLUSTER: u32 = 0x0FFFFFF8;
+// 如果某个簇存在坏扇区，则整个簇会用0xFFFFFF7标记为坏簇，这个坏簇标记就记录在它所对应的FAT表项中
 pub const BAD_CLUSTER: u32 = 0x0FFFFFF7;
-const FATENTRY_PER_SEC: u32 = BLOCK_SZ as u32 / 4;
+// 每一个sector 的 entry
+pub const FATENTRY_PER_SEC: u32 = BLOCK_SZ as u32 / 4;
+
+// 0000_0000 读写
 #[allow(unused)]
-pub const ATTRIBUTE_READ_ONLY: u8 = 0x01;
-#[allow(unused)]
-pub const ATTRIBUTE_HIDDEN: u8 = 0x02;
-#[allow(unused)]
-pub const ATTRIBUTE_SYSTEM: u8 = 0x04;
-#[allow(unused)]
-pub const ATTRIBUTE_VOLUME_ID: u8 = 0x08;
-#[allow(unused)]
-pub const ATTRIBUTE_DIRECTORY: u8 = 0x10;
-#[allow(unused)]
-pub const ATTRIBUTE_ARCHIVE: u8 = 0x20;
-#[allow(unused)]
+pub const ATTRIBUTE_READ_ONLY: u8 = 0x01; // 0000_0001 只读
+pub const ATTRIBUTE_HIDDEN: u8 = 0x02; // 0000_0010 隐藏
+pub const ATTRIBUTE_SYSTEM: u8 = 0x04; // 0000_0100 系统
+pub const ATTRIBUTE_VOLUME_ID: u8 = 0x08; // 0000_1000 卷标
+pub const ATTRIBUTE_DIRECTORY: u8 = 0x10; // 0001_0000 目录
+pub const ATTRIBUTE_ARCHIVE: u8 = 0x20; // 0010_0000 归档
 pub const ATTRIBUTE_LFN: u8 = 0x0F;
+
+#[allow(unused)]
 pub const DIRENT_SZ: usize = 32;
-#[allow(unused)]
 pub const SHORT_NAME_LEN: u32 = 8;
-#[allow(unused)]
 pub const SHORT_EXT_LEN: u32 = 3;
 pub const LONG_NAME_LEN: u32 = 13;
 
 pub const ALL_UPPER_CASE: u8 = 0x00;
 pub const ALL_LOWER_CASE: u8 = 0x08;
 
-type DataBlock = [u8; BLOCK_SZ];
+type DataBlock = [u8; BLOCK_SZ]; //数据块类型
 
 #[repr(packed)]
 #[derive(Clone, Copy, Debug)]
+
+// DBR DOS Boot Recorder
 pub struct FatBS {
-    pub unused: [u8; 11],
-    pub bytes_per_sector: u16,
-    pub sectors_per_cluster: u8,
-    pub reserved_sector_count: u16,
-    pub table_count: u8,
-    pub root_entry_count: u16, //FAT32必须等于0
-    pub total_sectors_16: u16,
-    pub media_type: u8,
-    pub table_size_16: u16, // 无用
-    pub sectors_per_track: u16,
-    pub head_side_count: u16,
-    pub hidden_sector_count: u32,
-    pub total_sectors_32: u32,
+    pub unused: [u8; 11],           // 0x00 0x03 跳转指令 + OEM
+    pub bytes_per_sector: u16,      // 0x0b 扇区字节数
+    pub sectors_per_cluster: u8,    // 0x0d 每簇扇区数
+    pub reserved_sector_count: u16, // 0x0e 保留扇区数
+    pub table_count: u8,            // 0x10 文件分配表个数， 一般为 2
+    pub root_entry_count: u16,      // 0x11 最大根目录条目个数 FAT32必须等于0
+    pub total_sectors_16: u16,      // 0x13 总扇区个数
+    pub media_type: u8,             // 0x15 介质介绍
+    pub table_size_16: u16,         // 0x16 文件分配表的扇区 FAT16
+    pub sectors_per_track: u16,     // 0x18 每个磁道的扇区
+    pub head_side_count: u16,       // 0x1a 磁头数量
+    pub hidden_sector_count: u32,   // 0x1c 隐藏扇区数量
+    pub total_sectors_32: u32,      // 0x20 总扇区数量
 }
 
 impl FatBS {
-    // 初始化BIOSParamterBlock
-    pub fn init_boot_sector(block_device: Arc<dyn BlockDevice>) {
-        let cache = get_info_cache(0, block_device, CacheMode::WRITE);
-        let mut guard = cache.write();
-        guard.modify(0, |fat_bs: &mut FatBS| {
-            *fat_bs = FatBS {
-                unused: [0u8; 11],
-                bytes_per_sector: BLOCK_SZ as u16,
-                sectors_per_cluster: 1,
-                reserved_sector_count: 2,
-                table_count: 2,
-                root_entry_count: 0,
-                total_sectors_16: 0,
-                media_type: 0,
-                table_size_16: 0,
-                sectors_per_track: 0,
-                head_side_count: 0,
-                hidden_sector_count: 0,
-                total_sectors_32: SECTOR_SIZE as u32,
-            }
-        });
+    // 这个地方是生成 BIOSParamterBlock
+    // pub fn init_boot_sector(block_device: Arc<dyn BlockDevice>) {
+    //     // 文件系统的起始扇区为0号扇区。
+    //     let cache = get_info_cache(0, block_device, CacheMode::WRITE);
+    //     let mut guard = cache.write();
+    //     // 防止冲突的写入，偏移为 0
+    //     guard.modify(0, |fat_bs: &mut FatBS| {
+    //         *fat_bs = FatBS {
+    //             unused: [0u8; 11],
+    //             bytes_per_sector: BLOCK_SZ as u16,
+    //             sectors_per_cluster: 1,
+    //             reserved_sector_count: 2,
+    //             table_count: 2,
+    //             root_entry_count: 0,
+    //             total_sectors_16: 0,
+    //             media_type: 0,
+    //             table_size_16: 0,
+    //             sectors_per_track: 0,
+    //             head_side_count: 0,
+    //             hidden_sector_count: 0,
+    //             total_sectors_32: TOTAL_SECTORS as u32,
+    //         }
+    //     });
 
-        drop(guard);
-    }
+    //     drop(guard);
+    // }
 
     pub fn total_sectors(&self) -> u32 {
         if self.total_sectors_16 == 0 {
@@ -95,6 +102,10 @@ impl FatBS {
 
     /// 第一个FAT表所在的扇区
     pub fn first_fat_sector(&self) -> u32 {
+        println!(
+            "\x1b[31m[fat] reser_fat-sec {} \x1b[0m",
+            self.reserved_sector_count as u32
+        );
         self.reserved_sector_count as u32
     }
 }
@@ -103,46 +114,46 @@ impl FatBS {
 #[derive(Clone, Copy, Debug)]
 #[allow(unused)]
 pub struct FatExtBS {
-    pub table_size_32: u32,
-    pub extended_flags: u16,
-    pub fat_version: u16,
-    pub root_clusters: u32,
-    pub fat_info: u16,
-    pub backup_bs_sector: u16,
-    pub reserved_0: [u8; 12],
-    pub drive_number: u8,
-    pub reserved_1: u8,
-    pub boot_signature: u8, //0x28 or 0x29
+    pub table_size_32: u32,    // 0x24 每个分配表的扇区 FAT32
+    pub extended_flags: u16,   // 0x28 Flag FAT32
+    pub fat_version: u16,      // 0x2a 版本号 FAT32
+    pub root_clusters: u32,    // 0x2c 根目录启动簇 FAT32
+    pub fat_info: u16,         // 0x30 fat info 扇区, 一般为1 FAT32
+    pub backup_bs_sector: u16, // 0x32 启动扇区备份 FAT32
+    pub reserved_0: [u8; 12],  // 0x34 保留 FAT32
+    pub drive_number: u8,      // 0x40 BIOS设备代号 FAT32
+    pub reserved_1: u8,        // 0x41 未使用 FAT32
+    pub boot_signature: u8,    // 0x42 标记 0x28 or 0x29 FAT32
 }
 
 impl FatExtBS {
-    /// 初始化FATEXTBS
-    pub fn init_ext_bs(block_device: Arc<dyn BlockDevice>) {
-        let cache = get_info_cache(0, block_device, CacheMode::WRITE);
-        let mut guard = cache.write();
-        guard.modify(36, |fat_ext_bs: &mut FatExtBS| {
-            *fat_ext_bs = FatExtBS {
-                table_size_32: FAT_SIZE as u32,
-                extended_flags: 0,
-                fat_version: 0,
-                root_clusters: 2,
-                fat_info: 1,
-                backup_bs_sector: 0,
-                reserved_0: [0u8; 12],
-                drive_number: 0x80,
-                reserved_1: 0,
-                boot_signature: 0,
-            };
-        });
-
-        drop(guard);
-    }
+    // 这个地方是生成 FATEXTBS
+    // pub fn init_ext_bs(block_device: Arc<dyn BlockDevice>) {
+    //     let cache = get_info_cache(0, block_device, CacheMode::WRITE);
+    //     let mut guard = cache.write();
+    //     guard.modify(36, |fat_ext_bs: &mut FatExtBS| {
+    //         *fat_ext_bs = FatExtBS {
+    //             table_size_32: TABLE_SIZE as u32,
+    //             extended_flags: 0,
+    //             fat_version: 0,
+    //             root_clusters: 2,
+    //             fat_info: 1,
+    //             backup_bs_sector: 0,
+    //             reserved_0: [0u8; 12],
+    //             drive_number: 0x80,
+    //             reserved_1: 0,
+    //             boot_signature: 0,
+    //         };
+    //     });
+    //     drop(guard);
+    // }
 
     /// FAT占用的扇区数
     pub fn fat_size(&self) -> u32 {
         self.table_size_32
     }
 
+    /// FSINFO（文件系统信息扇区）扇区号是1，该扇区为操作系统提供关于空簇总数及下一可用簇的信息。
     pub fn fat_info_sec(&self) -> u32 {
         self.fat_info as u32
     }
@@ -161,39 +172,42 @@ pub struct FSInfo {
 
 impl FSInfo {
     pub fn new(sector_num: u32) -> Self {
-        Self { sector_num }
+        Self { sector_num } // sector_num = 1
     }
 
+    // 这个地方是生成 FAT,
     // /// 初始化FSInfo，并写入文件系统镜像
-    pub fn init_fsinfo(&self, block_device: Arc<dyn BlockDevice>) {
-        let cache = get_info_cache(self.sector_num as usize, block_device, CacheMode::WRITE);
-        let mut guard = cache.write();
-        // 初始化标准位
-        guard.modify(0, |leadsig: &mut u32| {
-            *leadsig = bytes_order_u32(LEAD_SIGNATURE);
-        });
-        guard.modify(484, |sec_sig: &mut u32| {
-            *sec_sig = bytes_order_u32(SECOND_SIGNATURE);
-        });
-        drop(guard);
-    }
+    // pub fn init_fsinfo(&self, block_device: Arc<dyn BlockDevice>) {
+    //     let cache = get_info_cache(self.sector_num as usize, block_device, CacheMode::WRITE);
+    //     let mut guard = cache.write();
+    //     // FSI_LeadSig = 4
+    //     guard.modify(0, |leadsig: &mut u32| {
+    //         *leadsig = bytes_order_u32(LEAD_SIGNATURE);
+    //     });
+    //     // FSI_LeadSig + FSI_Reservedl = 484
+    //     guard.modify(484, |sec_sig: &mut u32| {
+    //         *sec_sig = bytes_order_u32(SECOND_SIGNATURE);
+    //     });
+    //     drop(guard);
+    // }
 
+    // 检查 lead signature
     fn check_lead_signature(&self, block_device: Arc<dyn BlockDevice>) -> bool {
         get_info_cache(self.sector_num as usize, block_device, CacheMode::READ)
             .read()
             .read(0, |&lead_sig: &u32| lead_sig == LEAD_SIGNATURE)
     }
 
-    fn check_another_signature(&self, block_device: Arc<dyn BlockDevice>) -> bool {
+    fn check_struct_signature(&self, block_device: Arc<dyn BlockDevice>) -> bool {
         get_info_cache(self.sector_num as usize, block_device, CacheMode::READ)
             .read()
-            .read(484, |&sec_sig: &u32| sec_sig == SECOND_SIGNATURE)
+            .read(484, |&sec_sig: &u32| sec_sig == STRUCT_SIGNATURE)
     }
 
     /// 对签名进行校验
     pub fn check_signature(&self, block_device: Arc<dyn BlockDevice>) -> bool {
         return self.check_lead_signature(block_device.clone())
-            && self.check_another_signature(block_device.clone());
+            && self.check_struct_signature(block_device.clone());
     }
 
     /// 读取空闲簇数
@@ -233,20 +247,22 @@ impl FSInfo {
 #[derive(Clone, Copy, Debug)]
 #[repr(packed)]
 #[allow(unused)]
+// 短文件目录项的具体定义
 pub struct ShortDirEntry {
-    pub name: [u8; 8], // 删除时第0位为0xE5，未使用时为0x00. 有多余可以用0x20填充
-    pub extension: [u8; 3],
-    pub attribute: u8, //可以用于判断是目录还是文件
-    pub winnt_reserved: u8,
-    pub creation_tenths: u8, //精确到0.1s
-    pub creation_time: u16,
-    pub creation_date: u16,
-    pub last_acc_date: u16,
-    pub cluster_high: u16,
-    pub modification_time: u16,
-    pub modification_date: u16,
-    pub cluster_low: u16,
-    pub size: u32,
+    // 删除时第0位为0xE5，未使用时为0x00. 有多余可以用0x20填充
+    pub name: [u8; 8],          // 文件名
+    pub extension: [u8; 3],     // 扩展名
+    pub attribute: u8,          // 属性字节 可以用于判断是目录还是文件
+    pub winnt_reserved: u8,     // 系统保留
+    pub creation_tenths: u8,    // 创建时间 精确到0.1s
+    pub creation_time: u16,     // 文件创建时间
+    pub creation_date: u16,     // 文件创建日期
+    pub last_acc_date: u16,     // 文件最后访问时间
+    pub cluster_high: u16,      // 文件起始簇号的高16位
+    pub modification_time: u16, // 文件最近修改时间
+    pub modification_date: u16, // 文件最近修改日期
+    pub cluster_low: u16,       // 文件起始簇号的低16位
+    pub size: u32,              // 文件长度
 }
 
 impl ShortDirEntry {
@@ -498,8 +514,8 @@ impl ShortDirEntry {
 
     /// 设置文件起始簇
     pub fn set_first_cluster(&mut self, cluster: u32) {
-        self.cluster_high = ((cluster & 0xFFFF0000) >> 16) as u16;
-        self.cluster_low = (cluster & 0x0000FFFF) as u16;
+        self.cluster_high = ((cluster & 0xFFFF0000) >> 16) as u16; // 高16位
+        self.cluster_low = (cluster & 0x0000FFFF) as u16; // 底16位
     }
 
     /// 清空文件，删除时使用
@@ -556,7 +572,7 @@ impl ShortDirEntry {
         let end: usize;
         if self.is_dir() {
             let size = bytes_per_cluster
-                * fat_reader.count_claster_num(self.first_cluster() as u32, block_device.clone())
+                * fat_reader.count_cluster_num(self.first_cluster() as u32, block_device.clone())
                     as usize;
             end = offset + buf.len().min(size); // DEBUG:约束上界
         } else {
@@ -643,7 +659,7 @@ impl ShortDirEntry {
         let end: usize;
         if self.is_dir() {
             let size = bytes_per_cluster
-                * fat_reader.count_claster_num(self.first_cluster() as u32, block_device.clone())
+                * fat_reader.count_cluster_num(self.first_cluster() as u32, block_device.clone())
                     as usize;
             end = offset + buf.len().min(size); // DEBUG:约束上界
         } else {
@@ -733,19 +749,18 @@ impl ShortDirEntry {
 #[repr(packed)]
 #[allow(unused)]
 #[derive(Clone, Copy, Debug)]
+// use Unicode !!!
+// 如果是该文件的最后一个长文件名目录项，则将该目录项的序号与 0x40 进行“或（OR）运算”的结果写入该位置。
+// 长文件名要有\0
 pub struct LongDirEntry {
-    // use Unicode !!!
-    // 如果是该文件的最后一个长文件名目录项，
-    // 则将该目录项的序号与 0x40 进行“或（OR）运算”的结果写入该位置。
-    // 长文件名要有\0
-    order: u8,       // 删除时为0xE5
-    name1: [u8; 10], // 5characters
-    attribute: u8,   // should be 0x0F
-    type_: u8,       //
-    check_sum: u8,
-    name2: [u8; 12], // 6characters
-    zero: [u8; 2],
-    name3: [u8; 4], // 2characters
+    order: u8,       // 属性字节位 删除时为0xE5
+    name1: [u8; 10], // 长文件名 unicode 5characters
+    attribute: u8,   // 长文件名目录性标志 should be 0x0F
+    type_: u8,       // 系统保留
+    check_sum: u8,   // 校验值
+    name2: [u8; 12], // 长文件名 unicode 6characters
+    zero: [u8; 2],   // 文件起始簇号
+    name3: [u8; 4],  // 长文件名 unicode 2characters
 }
 
 impl From<&[u8]> for LongDirEntry {
@@ -931,189 +946,5 @@ impl LongDirEntry {
     }
     pub fn get_checksum(&self) -> u8 {
         self.check_sum
-    }
-}
-
-// 常驻内存，不作一一映射
-#[allow(unused)]
-#[derive(Clone, Copy)]
-pub struct FAT {
-    fat1_sector: u32, //FAT1和FAT2的起始扇区
-    fat2_sector: u32,
-    n_sectors: u32, //大小
-    n_entry: u32,   //表项数量
-}
-
-impl FAT {
-    pub fn new(fat1_sector: u32, fat2_sector: u32, n_sectors: u32, n_entry: u32) -> Self {
-        Self {
-            fat1_sector,
-            fat2_sector,
-            n_sectors,
-            n_entry,
-        }
-    }
-
-    /* 计算簇对应表项的位置：sector和offset */
-    fn calculate_pos(&self, cluster: u32) -> (u32, u32, u32) {
-        // 返回sector号和offset
-        // 前为FAT1的扇区号，后为FAT2的扇区号，最后为offset
-        // DEBUG
-        let fat1_sec = self.fat1_sector + cluster / FATENTRY_PER_SEC;
-        let fat2_sec = self.fat2_sector + cluster / FATENTRY_PER_SEC;
-        let offset = 4 * (cluster % FATENTRY_PER_SEC);
-        (fat1_sec, fat2_sec, offset)
-    }
-
-    /* 搜索下一个可用簇 */
-    // caller需要确定有足够的空闲簇，这里不作越界检查
-    pub fn next_free_cluster(
-        &self,
-        current_cluster: u32,
-        block_device: Arc<dyn BlockDevice>,
-    ) -> u32 {
-        // DEBUG
-        let mut curr_cluster = current_cluster + 1;
-        loop {
-            #[allow(unused)]
-            let (fat1_sec, fat2_sec, offset) = self.calculate_pos(curr_cluster);
-            // 查看当前cluster的表项
-            let entry_val =
-                get_info_cache(fat1_sec as usize, block_device.clone(), CacheMode::READ)
-                    .read()
-                    .read(offset as usize, |&entry_val: &u32| entry_val);
-            if entry_val == FREE_CLUSTER {
-                break;
-            } else {
-                curr_cluster += 1;
-            }
-        }
-        curr_cluster & 0x0FFFFFFF
-    }
-
-    /// 查询当前簇的下一个簇
-    pub fn get_next_cluster(&self, cluster: u32, block_device: Arc<dyn BlockDevice>) -> u32 {
-        // 需要对损坏簇作出判断
-        // 及时使用备用表
-        // 无效或未使用返回0
-        let (fat1_sec, fat2_sec, offset) = self.calculate_pos(cluster);
-        //println!("fat1_sec={} offset = {}", fat1_sec, offset);
-        let fat1_rs = get_info_cache(fat1_sec as usize, block_device.clone(), CacheMode::READ)
-            .read()
-            .read(offset as usize, |&next_cluster: &u32| next_cluster);
-        let fat2_rs = get_info_cache(fat2_sec as usize, block_device.clone(), CacheMode::READ)
-            .read()
-            .read(offset as usize, |&next_cluster: &u32| next_cluster);
-        if fat1_rs == BAD_CLUSTER {
-            if fat2_rs == BAD_CLUSTER {
-                0
-            } else {
-                fat2_rs & 0x0FFFFFFF
-            }
-        } else {
-            fat1_rs & 0x0FFFFFFF
-        }
-    }
-
-    pub fn set_end(&self, cluster: u32, block_device: Arc<dyn BlockDevice>) {
-        self.set_next_cluster(cluster, END_CLUSTER, block_device);
-    }
-
-    /* 设置当前簇的下一个簇 */
-    pub fn set_next_cluster(
-        &self,
-        cluster: u32,
-        next_cluster: u32,
-        block_device: Arc<dyn BlockDevice>,
-    ) {
-        // 同步修改两个FAT
-        // 注意设置末尾项为 0x0FFFFFF8
-        //assert_ne!(next_cluster, 0);
-        let (fat1_sec, fat2_sec, offset) = self.calculate_pos(cluster);
-        get_info_cache(fat1_sec as usize, block_device.clone(), CacheMode::WRITE)
-            .write()
-            .modify(offset as usize, |old_clu: &mut u32| {
-                *old_clu = next_cluster;
-            });
-        get_info_cache(fat2_sec as usize, block_device.clone(), CacheMode::WRITE)
-            .write()
-            .modify(offset as usize, |old_clu: &mut u32| {
-                *old_clu = next_cluster;
-            });
-    }
-
-    /* 获取某个文件的指定cluster */
-    pub fn get_cluster_at(
-        &self,
-        start_cluster: u32,
-        index: u32,
-        block_device: Arc<dyn BlockDevice>,
-    ) -> u32 {
-        // 如果有异常，返回0
-        //println!("** get_cluster_at index = {}",index);
-        let mut cluster = start_cluster;
-        #[allow(unused)]
-        for i in 0..index {
-            //print!("in fat curr cluster = {}", cluster);
-            cluster = self.get_next_cluster(cluster, block_device.clone());
-            //println!(", next cluster = {:X}", cluster);
-            if cluster == 0 {
-                break;
-            }
-        }
-        cluster & 0x0FFFFFFF
-    }
-
-    pub fn final_cluster(&self, start_cluster: u32, block_device: Arc<dyn BlockDevice>) -> u32 {
-        let mut curr_cluster = start_cluster;
-        assert_ne!(start_cluster, 0);
-        loop {
-            let next_cluster = self.get_next_cluster(curr_cluster, block_device.clone());
-            //println!("in fianl cl {};{}", curr_cluster, next_cluster);
-            //assert_ne!(next_cluster, 0);
-            if next_cluster >= END_CLUSTER || next_cluster == 0 {
-                return curr_cluster & 0x0FFFFFFF;
-            } else {
-                curr_cluster = next_cluster;
-            }
-        }
-    }
-
-    pub fn get_all_cluster_of(
-        &self,
-        start_cluster: u32,
-        block_device: Arc<dyn BlockDevice>,
-    ) -> Vec<u32> {
-        let mut curr_cluster = start_cluster;
-        let mut v_cluster: Vec<u32> = Vec::new();
-        loop {
-            v_cluster.push(curr_cluster & 0x0FFFFFFF);
-            let next_cluster = self.get_next_cluster(curr_cluster, block_device.clone());
-            //println!("in all, curr = {}, next = {}", curr_cluster, next_cluster);
-            //assert_ne!(next_cluster, 0);
-            if next_cluster >= END_CLUSTER || next_cluster == 0 {
-                return v_cluster;
-            } else {
-                curr_cluster = next_cluster;
-            }
-        }
-    }
-
-    pub fn count_claster_num(&self, start_cluster: u32, block_device: Arc<dyn BlockDevice>) -> u32 {
-        if start_cluster == 0 {
-            return 0;
-        }
-        let mut curr_cluster = start_cluster;
-        let mut count: u32 = 0;
-        loop {
-            count += 1;
-            let next_cluster = self.get_next_cluster(curr_cluster, block_device.clone());
-            //println!("next_cluster = {:X}",next_cluster);
-            if next_cluster >= END_CLUSTER || next_cluster > 0xF000000 {
-                return count;
-            } else {
-                curr_cluster = next_cluster;
-            }
-        }
     }
 }
