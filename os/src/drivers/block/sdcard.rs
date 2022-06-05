@@ -725,7 +725,6 @@ lazy_static! {
 
 fn init_sdcard() -> SDCard<SPIImpl<SPI0>> {
     usleep(100000);
-    println!("\x1b[31m[sdcard] init sdcard \x1b[0m");
     let peripherals = unsafe { Peripherals::steal() };
     sysctl::pll_set_freq(sysctl::pll::PLL0, 800_000_000).unwrap();
     sysctl::pll_set_freq(sysctl::pll::PLL1, 300_000_000).unwrap();
@@ -735,6 +734,7 @@ fn init_sdcard() -> SDCard<SPIImpl<SPI0>> {
     peripherals.UARTHS.configure(115_200.bps(), &clocks);
     io_init();
 
+    alert!("[sdcard] init sdcard");
     let spi = peripherals.SPI0.constrain();
     let sd = SDCard::new(spi, SD_CS, SD_CS_GPIONUM);
     let info = sd.init().unwrap();

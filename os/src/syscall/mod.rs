@@ -1,5 +1,13 @@
 #![allow(unused)]
 
+mod fs;
+mod process;
+mod system;
+
+use fs::*;
+use process::*;
+use system::*;
+
 const SYSCALL_GETCWD: usize = 17;
 const SYSCALL_DUP: usize = 23;
 const SYSCALL_DUP3: usize = 24;
@@ -61,13 +69,9 @@ const SYSCALL_PRLIMIT: usize = 261;
 const SYSCALL_RENAMEAT2: usize = 276;
 const SYSCALL_SHUTDOWN: usize = 0xffff;
 
-mod fs;
-mod process;
-
-use fs::*;
-use process::*;
 pub fn syscall(syscall_id: usize, args: [usize; 3]) -> isize {
     match syscall_id {
+        SYSCALL_GETCWD => sys_getcwd(args[0] as *mut u8, args[1]),
         SYSCALL_OPENAT => sys_openat(args[0] as *const u8, args[1] as u32),
         SYSCALL_CLOSE => sys_close(args[0] as usize),
         SYSCALL_READ => sys_read(args[0], args[1] as *const u8, args[2]),
@@ -79,6 +83,7 @@ pub fn syscall(syscall_id: usize, args: [usize; 3]) -> isize {
         SYSCALL_CLONE => sys_clone(),
         SYSCALL_EXECVE => sys_execve(args[0] as *const u8, args[1] as *const usize),
         SYSCALL_WAIT4 => sys_wait4(args[0] as isize, args[1] as *mut i32),
+        SYSCALL_SHUTDOWN => sys_shutdown(),
         _ => panic!("Unsupported syscall_id: {}", syscall_id),
     }
 }

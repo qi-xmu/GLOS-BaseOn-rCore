@@ -32,3 +32,12 @@ macro_rules! println {
         $crate::console::print(format_args!(concat!($fmt, "\n") $(, $($arg)+)?));
     }
 }
+
+#[macro_export]
+macro_rules! alert {
+    ($fmt: literal $(, $($arg: tt)+)?) => {
+        print!("\x1b[1,31m");
+        $crate::console::print(format_args!(concat!($fmt, "\n") $(, $($arg)+)?));
+        print!("\x1b[0m");
+    }
+}

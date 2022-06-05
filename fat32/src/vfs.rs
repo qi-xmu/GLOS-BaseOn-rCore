@@ -139,20 +139,15 @@ impl VFile {
     }
 
     fn find_long_name(&self, name: &str, dir_ent: &ShortDirEntry) -> Option<VFile> {
-        let name_vec = self.fs.read().long_name_split(name);
-        let mut offset: usize = 0;
-        let mut long_ent = LongDirEntry::empty();
-        let long_ent_num = name_vec.len();
-        let mut long_pos_vec: Vec<(usize, usize)> = Vec::new();
-        let name_last = name_vec[long_ent_num - 1].clone();
-        let mut step: usize = long_ent_num;
-        for i in (long_ent_num - 2)..0 {
-            if name_last == name_vec[i] {
-                step = step - i - 1;
-                break;
-            }
-        }
-        // step = 1;
+        // 长文件名，可能需要多个目录项
+        let name_vec = self.fs.read().long_name_split(name, false); // 拆分
+        let mut offset: usize = 0; // 偏移量
+        let mut long_ent = LongDirEntry::empty(); // 长目录序项
+        let long_ent_num = name_vec.len(); // 名字拆分的个数
+        let mut long_pos_vec: Vec<(usize, usize)> = Vec::new(); // 名字位置
+        let name_last = name_vec[long_ent_num - 1].clone(); // 最后一个名字
+        let step: usize = long_ent_num; //
+
         loop {
             long_pos_vec.clear();
             // 读取offset处的目录项
@@ -164,9 +159,10 @@ impl VFile {
                 &self.block_device,
             );
             if read_sz != DIRENT_SZ || long_ent.is_empty() {
-                return None;
+                return None; // 读取结束，不是目录项
             }
-            if long_ent.get_name_raw() == name_last && long_ent.attribute() == ATTRIBUTE_LFN {
+            // 最后一项匹配
+            if long_ent.get_name_format() == name_last && long_ent.attribute() == ATTRIBUTE_LFN {
                 // 匹配：如果名一致，且第一字段为0x4*，获取该order，以及校验和
                 let mut order = long_ent.get_order();
                 let l_checksum = long_ent.get_checksum();
@@ -283,38 +279,31 @@ impl VFile {
     /// 根据名称搜索当前目录下的文件
     pub fn find_vfile_byname(&self, name: &str) -> Option<VFile> {
         assert!(self.is_dir());
-        // 将文件名和扩展分开
         let mut name_and_ext: Vec<&str> = name.split(".").collect();
         let name_ = name_and_ext[0].as_bytes();
         if name_and_ext.len() == 1 {
-            name_and_ext.push("");
+            name_and_ext.push(""); // 扩展为空
         }
         let ext_ = name_and_ext[1].as_bytes();
-        // FAT32目录没有大小，只能搜，read_at已经做了完善的适配
+
         self.read_short_dirent(|short_ent: &ShortDirEntry| {
             if name_.len() > 8 || ext_.len() > 3 {
-                //长文件名
-                return self.find_long_name(name, short_ent);
+                println!("[long name] {}", name);
+                self.find_long_name(name, short_ent) // 长文件名
             } else {
-                // 短文件名
-                return self.find_short_name(name, short_ent);
+                println!("[short name] {}", name);
+                self.find_short_name(name, short_ent) // 短文件名
             }
         })
     }
 
     /// 根据路径递归搜索文件
     pub fn find_vfile_bypath(&self, path: Vec<&str>) -> Option<Arc<VFile>> {
-        let _ = self.fs.read(); // 获取读锁
         let len = path.len();
-        if len == 0 {
-            // 如果长度为0，则返回自己
-            return Some(Arc::new(self.clone()));
-        }
         let mut current_vfile = self.clone();
         for i in 0..len {
-            if path[i] == "" || path[i] == "." {
-                // 跳过，表示仍然为当前目录
-                continue;
+            if path[i] == "." {
+                continue; // 跳过，表示仍然为当前目录
             }
             if let Some(vfile) = current_vfile.find_vfile_byname(path[i]) {
                 current_vfile = vfile;
@@ -409,7 +398,7 @@ impl VFile {
         let mut short_ent = ShortDirEntry::empty();
         if name_.len() > 8 || ext_.len() > 3 {
             // 长文件名拆分
-            let mut v_long_name = manager_reader.long_name_split(name);
+            let mut v_long_name = manager_reader.long_name_split(name, true);
             let long_ent_num = v_long_name.len();
             let mut long_ent = LongDirEntry::empty();
             // 生成短文件名及对应目录项

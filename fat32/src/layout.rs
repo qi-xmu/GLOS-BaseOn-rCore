@@ -38,7 +38,7 @@ pub const ATTRIBUTE_LFN: u8 = 0x0F; // 0000_1111 长目录标志
 pub const DIRENT_SZ: usize = 32;
 pub const SHORT_NAME_LEN: usize = 8;
 pub const SHORT_EXT_LEN: usize = 3;
-pub const LONG_NAME_LEN: u32 = 13;
+pub const LONG_NAME_LEN: usize = 13;
 
 pub const ALL_UPPER_CASE: u8 = 0x00;
 pub const ALL_LOWER_CASE: u8 = 0x08;

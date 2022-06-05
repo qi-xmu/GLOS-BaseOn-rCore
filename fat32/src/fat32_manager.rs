@@ -4,7 +4,7 @@ use super::{
 };
 
 use crate::{layout::*, println, VFile, FAT};
-use alloc::string::String;
+use alloc::string::{String, ToString};
 use alloc::sync::Arc;
 use alloc::vec::Vec;
 use spin::RwLock;
@@ -283,25 +283,18 @@ impl FAT32Manager {
     }
 
     /// 将长文件名拆分，并且补全0
-    pub fn long_name_split(&self, name: &str) -> Vec<String> {
-        let len = name.len() as u32; // 要有\0
-        let name_bytes = name.as_bytes();
-        let mut name_vec: Vec<String> = Vec::new();
-        // 计算需要几个目录项
-        let n_ent = (len + LONG_NAME_LEN - 1) / LONG_NAME_LEN;
-        let mut temp_buffer = String::new();
-        for i in 0..n_ent {
-            temp_buffer.clear();
-            for j in i * LONG_NAME_LEN..i * LONG_NAME_LEN + LONG_NAME_LEN {
-                if j < len {
-                    temp_buffer.push(name_bytes[j as usize] as char);
-                } else if j > len {
-                    temp_buffer.push(0xFF as char); //填充
-                } else {
-                    temp_buffer.push(0x00 as char);
-                }
+    pub fn long_name_split(&self, name: &str, end0: bool) -> Vec<String> {
+        // 计算需要几个目录项 一个目录项可以存放13个字节
+        let mut name_vec: Vec<String> = name
+            .as_bytes()
+            .chunks(LONG_NAME_LEN)
+            .map(|x| core::str::from_utf8(x).unwrap().to_string())
+            .collect();
+        if end0 {
+            let last = name_vec.len();
+            if (last != 0) && (name_vec[last - 1].len() < LONG_NAME_LEN) {
+                name_vec[last - 1].push('\0');
             }
-            name_vec.push(temp_buffer.clone());
         }
         name_vec
     }

@@ -1,5 +1,5 @@
 //! File and filesystem-related syscalls
-use crate::mm::{translated_byte_buffer, translated_str};
+use crate::mm::{translated_byte_buffer, translated_str, UserBuffer};
 use crate::sbi::console_getchar;
 use crate::task::{current_task, current_user_token, suspend_current_and_run_next};
 
@@ -7,6 +7,25 @@ use crate::fs::{open, DiskInodeType, FileDescriptor, FileType, OpenFlags};
 
 const FD_STDIN: usize = 0;
 const FD_STDOUT: usize = 1;
+
+pub fn sys_getcwd(buf: *mut u8, size: usize) -> isize {
+    let task = current_task().unwrap();
+    let token = current_user_token();
+    let buf_vec = translated_byte_buffer(token, buf, size);
+    let inner = task.inner_exclusive_access();
+
+    let mut user_buf = UserBuffer::new(buf_vec);
+    let mut cwd = inner.current_path.clone();
+    cwd.push('\0');
+    let cwd_str = cwd.as_str();
+
+    let ret = unsafe {
+        let cwd_buf = core::slice::from_raw_parts(cwd_str.as_ptr(), cwd_str.len());
+        user_buf.write(cwd_buf) as isize
+    };
+    println!("sys_getcwd(buf: {:#x?}, size = {}) = {}", buf, size, ret);
+    ret
+}
 
 pub fn sys_openat(path: *const u8, flags: u32) -> isize {
     let task = current_task().unwrap();

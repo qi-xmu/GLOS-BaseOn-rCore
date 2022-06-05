@@ -167,14 +167,14 @@ pub fn list_apps() {
 
 bitflags! {
     pub struct OpenFlags: u32 {
-        const RDONLY = 0;
-        const WRONLY = 1 << 0;
-        const RDWR = 1 << 1;
-        const CREATE = 1 << 9;
-        const TRUNC = 1 << 10;
-        const DIRECTROY = 0200000;
-        const LARGEFILE  = 0100000;
-        const CLOEXEC = 02000000;
+        const RDONLY = 0; // read only
+        const WRONLY = 1 << 0; // write only
+        const RDWR = 1 << 1; // read write
+        const CREATE = 1 << 9; // create
+        const TRUNC = 1 << 10; // trunc
+        const DIRECTROY = 0200000; // dir
+        const LARGEFILE  = 0100000; // large file
+        const CLOEXEC = 02000000; // close when exec
     }
 }
 
@@ -198,7 +198,6 @@ pub fn open(
     flags: OpenFlags,
     dtype: DiskInodeType,
 ) -> Option<Arc<OSInode>> {
-    // 找到当前路径的inode(file, directory)
     let cur_inode = {
         if work_path == "/" {
             ROOT_VFILE.clone()
@@ -209,7 +208,7 @@ pub fn open(
     };
     let mut pathv: Vec<&str> = path.split('/').collect();
 
-    let (readable, writeable) = flags.read_write();
+    let (readable, writeable) = flags.read_write(); // 权限
     if flags.contains(OpenFlags::CREATE) {
         if let Some(inode) = cur_inode.find_vfile_bypath(pathv.clone()) {
             inode.remove();

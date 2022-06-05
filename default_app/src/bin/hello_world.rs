@@ -6,6 +6,6 @@ extern crate default_lib;
 
 #[no_mangle]
 pub fn main() -> i32 {
-    println!("Hello world from user mode program!");
+    alert!("Hello world from user mode program!");
     0
 }
