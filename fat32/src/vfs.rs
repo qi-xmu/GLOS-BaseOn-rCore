@@ -1,4 +1,4 @@
-use super::{fat32_manager::*, get_info_cache, layout::*, print, println, BlockDevice, CacheMode};
+use super::{fat32_manager::*, get_info_cache, layout::*, println, BlockDevice, CacheMode};
 use alloc::string::String;
 use alloc::sync::Arc;
 use alloc::vec::Vec;
@@ -288,10 +288,8 @@ impl VFile {
 
         self.read_short_dirent(|short_ent: &ShortDirEntry| {
             if name_.len() > 8 || ext_.len() > 3 {
-                println!("[long name] {}", name);
                 self.find_long_name(name, short_ent) // 长文件名
             } else {
-                println!("[short name] {}", name);
                 self.find_short_name(name, short_ent) // 短文件名
             }
         })

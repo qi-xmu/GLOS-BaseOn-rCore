@@ -3,7 +3,7 @@ use super::{
     FatBS, FatExtBS,
 };
 
-use crate::{layout::*, println, VFile, FAT};
+use crate::{layout::*, VFile, FAT};
 use alloc::string::{String, ToString};
 use alloc::sync::Arc;
 use alloc::vec::Vec;

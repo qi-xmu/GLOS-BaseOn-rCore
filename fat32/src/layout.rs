@@ -1,5 +1,5 @@
 use crate::utils::clone_into_array;
-use crate::{println, FAT};
+use crate::FAT;
 
 use super::{
     fat32_manager::FAT32Manager, get_block_cache, get_info_cache, BlockDevice, CacheMode, BLOCK_SZ,

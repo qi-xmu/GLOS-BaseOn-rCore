@@ -11,13 +11,13 @@ extern crate default_lib;
 use alloc::vec::Vec;
 use default_lib::*;
 
-fn test() -> ! {
+fn test() {
     let mut apps = Vec::new();
     apps.push("getcwd\0");
-    // apps.push("times\0");
-    // apps.push("gettimeofday\0");
-    // apps.push("sleep\0");
-    // apps.push("brk\0");
+    apps.push("times\0");
+    apps.push("gettimeofday\0");
+    apps.push("sleep\0");
+    apps.push("brk\0");
     // apps.push("clone\0");
     // apps.push("close\0");
     // apps.push("dup2\0");
@@ -45,16 +45,22 @@ fn test() -> ! {
     // apps.push("yield\0");
     // apps.push("unlink\0");
     // apps.push("chdir\0");
-    println!("{:?}", apps);
     for app_name in apps {
-        // let pid = fork();
-        // if pid == 0 {
-        exec(app_name, &[core::ptr::null::<u8>()]);
-        // } else {
-        //     let mut exit_code = 0;
-        //     waitpid(pid as usize, &mut exit_code);
-        // }
-        println!("{} exec end", app_name);
+        let pid = fork();
+        if pid == 0 {
+            // println!("{} exec end. pid {}", app_name, pid);
+            exec(app_name, &[core::ptr::null::<u8>()]);
+            return;
+        } else {
+            let mut exit_code = 0;
+            loop {
+                let pid = waitpid(pid as usize, &mut exit_code);
+                if pid != -2 {
+                    break;
+                }
+            }
+            // println!("child proc pid {}", pid);
+        }
     }
 
     shutdown()
@@ -64,4 +70,5 @@ fn test() -> ! {
 pub fn main() -> i32 {
     alert!("Start Test All");
     test();
+    0
 }

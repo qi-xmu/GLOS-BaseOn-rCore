@@ -2,7 +2,7 @@ use alloc::{sync::Arc, vec::Vec};
 
 use crate::{
     block_cache::{get_info_cache, CacheMode},
-    println, BlockDevice, BAD_CLUSTER, END_CLUSTER, FATENTRY_PER_SEC, FREE_CLUSTER,
+    BlockDevice, BAD_CLUSTER, END_CLUSTER, FATENTRY_PER_SEC, FREE_CLUSTER,
 };
 
 // 常驻内存，不作一一映射

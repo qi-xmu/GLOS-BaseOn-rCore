@@ -3,7 +3,7 @@
 
 extern crate default_lib;
 
-use default_lib::{exec, fork, println, wait, yield_};
+use default_lib::{exec, fork, wait, yield_};
 
 #[no_mangle]
 fn main() -> i32 {
