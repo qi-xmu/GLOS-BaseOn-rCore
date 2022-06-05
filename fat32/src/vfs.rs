@@ -152,7 +152,7 @@ impl VFile {
                 break;
             }
         }
-        step = 1;
+        // step = 1;
         loop {
             long_pos_vec.clear();
             // 读取offset处的目录项

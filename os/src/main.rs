@@ -21,6 +21,7 @@ mod config;
 mod drivers;
 pub mod fs;
 pub mod lang_items;
+pub mod loader;
 pub mod mm;
 pub mod sbi;
 pub mod sync;
@@ -57,6 +58,7 @@ pub fn rust_main() -> ! {
     timer::set_next_trigger();
     fs::list_apps();
     task::add_initproc();
-    // task::run_tasks();
+
+    task::run_tasks();
     panic!("Unreachable in rust_main!");
 }

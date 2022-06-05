@@ -1,3 +1,6 @@
+use core::arch::asm;
+
+use crate::loader::get_test_binary;
 use crate::mm::{translated_ref, translated_refmut, translated_str};
 use crate::task::{
     add_task, current_task, current_user_token, exit_current_and_run_next,
@@ -15,12 +18,12 @@ pub fn sys_exit(exit_code: i32) -> ! {
     panic!("Unreachable in sys_exit!");
 }
 
-pub fn sys_yield() -> isize {
+pub fn sys_sched_yield() -> isize {
     suspend_current_and_run_next();
     0
 }
 
-pub fn sys_get_time() -> isize {
+pub fn sys_gettimeofday() -> isize {
     get_time_ms() as isize
 }
 
@@ -28,7 +31,7 @@ pub fn sys_getpid() -> isize {
     current_task().unwrap().pid.0 as isize
 }
 
-pub fn sys_fork() -> isize {
+pub fn sys_clone() -> isize {
     let current_task = current_task().unwrap();
     let new_task = current_task.fork();
     let new_pid = new_task.pid.0;
@@ -42,8 +45,8 @@ pub fn sys_fork() -> isize {
     new_pid as isize
 }
 
-pub fn sys_exec(path: *const u8, mut args: *const usize) -> isize {
-    println!("user call sys_exec.");
+pub fn sys_execve(path: *const u8, mut args: *const usize) -> isize {
+    println!("user call sys_execve.");
     let token = current_user_token();
     let path = translated_str(token, path);
 
@@ -61,7 +64,19 @@ pub fn sys_exec(path: *const u8, mut args: *const usize) -> isize {
     let task = current_task().unwrap();
     let inner = task.inner_exclusive_access();
     let current_path = inner.current_path.as_str();
-    // let args_vec_copy = args_vec.clone();
+
+    // DOING test_all
+    println!("{} {}", current_path, path);
+
+    if current_path == "/" && path == "test_all" {
+        println!("TEST ALL");
+        task.exec(get_test_binary(), args_vec);
+        unsafe {
+            asm!("sfence.vma");
+            asm!("fence.i");
+        }
+        return 0;
+    }
 
     if let Some(app_inode) = open(
         current_path,
@@ -85,7 +100,7 @@ pub fn sys_exec(path: *const u8, mut args: *const usize) -> isize {
 
 /// If there is not a child process whose pid is same as given, return -1.
 /// Else if there is a child process but it is still running, return -2.
-pub fn sys_waitpid(pid: isize, exit_code_ptr: *mut i32) -> isize {
+pub fn sys_wait4(pid: isize, exit_code_ptr: *mut i32) -> isize {
     let task = current_task().unwrap();
     // find a child process
 

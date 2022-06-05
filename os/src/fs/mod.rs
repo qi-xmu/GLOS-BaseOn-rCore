@@ -9,6 +9,8 @@ use crate::mm::UserBuffer;
 use alloc::sync::Arc;
 
 #[derive(Clone)]
+
+// 文件描述符号
 pub struct FileDescriptor {
     pub cloexec: bool,
     pub ftype: FileType,

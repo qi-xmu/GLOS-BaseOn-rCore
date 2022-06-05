@@ -65,8 +65,10 @@ disasm-vim: kernel
 	@vim $(DISASM_TMP)
 	@rm $(DISASM_TMP)
 
-run: run-inner
+run: app run-inner
 	
+app:
+	cd ../default_app && make clean && make 
 
 run-inner: build
 ifeq ($(BOARD),qemu)
@@ -100,4 +102,4 @@ gdbserver: build
 gdbclient:
 	@$(GDB) -ex 'file $(KERNEL_ELF)' -ex 'set arch riscv:rv64' -ex 'target remote localhost:1234'
 
-.PHONY: build env kernel clean disasm disasm-vim run-inner switch-check gdbserver gdbclient 
+.PHONY: build env kernel clean disasm disasm-vim run-inner switch-check gdbserver gdbclient  app

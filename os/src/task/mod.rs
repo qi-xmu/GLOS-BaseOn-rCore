@@ -22,12 +22,14 @@ mod switch;
 #[allow(clippy::module_inception)]
 mod task;
 
-use crate::fs::{open, OpenFlags};
+// use crate::fs::{open, OpenFlags};
 use alloc::sync::Arc;
 use lazy_static::*;
 pub use manager::{fetch_task, TaskManager};
 use switch::__switch;
 use task::{TaskControlBlock, TaskStatus};
+
+use crate::loader::*;
 
 pub use context::TaskContext;
 pub use manager::add_task;
@@ -90,20 +92,13 @@ pub fn exit_current_and_run_next(exit_code: i32) {
 
 lazy_static! {
     ///Globle process that init user shell
-    pub static ref INITPROC: Arc<TaskControlBlock> = Arc::new({
-        let inode = open(
-            "/",
-            // "initproc",// testing
-            "getcwd",
-            OpenFlags::RDONLY,
-            crate::fs::DiskInodeType::File,
-        )
-        .unwrap();
-        let v = inode.read_all();
-        TaskControlBlock::new(v.as_slice())
-    });
+    pub static ref INITPROC: Arc<TaskControlBlock> = {
+        Arc::new(TaskControlBlock::new( get_initproc_binary() ))
+    };
 }
 /// Add init process to the manager
 pub fn add_initproc() {
     add_task(INITPROC.clone());
+    add_task(Arc::new(TaskControlBlock::new(get_hello_binary())));
+    // add_task(Arc::new(TaskControlBlock::new("test", get_test_binary())));
 }

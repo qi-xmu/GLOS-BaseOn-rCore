@@ -1,3 +1,4 @@
+#![allow(unused)]
 use crate::sbi::console_putchar;
 use core::fmt::{self, Write};
 
@@ -11,7 +12,6 @@ impl Write for Stdout {
         Ok(())
     }
 }
-
 pub fn print(args: fmt::Arguments) {
     Stdout.write_fmt(args).unwrap();
 }

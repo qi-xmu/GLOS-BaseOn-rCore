@@ -3,30 +3,29 @@ use super::TaskContext;
 use super::{pid_alloc, KernelStack, PidHandle};
 use crate::config::TRAP_CONTEXT;
 use crate::mm::{translated_refmut, MemorySet, PhysPageNum, VirtAddr, KERNEL_SPACE};
-use crate::sync::UPSafeCell;
 use crate::trap::{trap_handler, TrapContext};
-use alloc::string::String; //string
+use alloc::string::String;
 use alloc::sync::{Arc, Weak};
 use alloc::vec;
 use alloc::vec::Vec;
-use core::cell::RefMut;
+use spin::{Mutex, MutexGuard};
 
 use crate::fs::{FileDescriptor, FileType, Stdin, Stdout};
 pub type FileDescriptorTable = Vec<Option<FileDescriptor>>;
 
 pub struct TaskControlBlock {
     // immutable
-    pub pid: PidHandle,
+    pub pid: PidHandle, // PID
     pub kernel_stack: KernelStack,
     // mutable
-    inner: UPSafeCell<TaskControlBlockInner>,
+    inner: Arc<Mutex<TaskControlBlockInner>>,
 }
 
 pub struct TaskControlBlockInner {
-    pub trap_cx_ppn: PhysPageNum,
-    pub base_size: usize,
-    pub task_cx: TaskContext,
-    pub task_status: TaskStatus,
+    pub trap_cx_ppn: PhysPageNum, // 物理页号
+    pub base_size: usize,         //
+    pub task_cx: TaskContext,     // 上下文
+    pub task_status: TaskStatus,  // 状态
     pub memory_set: MemorySet,
     pub parent: Option<Weak<TaskControlBlock>>,
     pub children: Vec<Arc<TaskControlBlock>>,
@@ -70,58 +69,61 @@ impl TaskControlBlockInner {
 }
 
 impl TaskControlBlock {
-    pub fn inner_exclusive_access(&self) -> RefMut<'_, TaskControlBlockInner> {
-        self.inner.exclusive_access()
+    pub fn inner_exclusive_access(&self) -> MutexGuard<'_, TaskControlBlockInner> {
+        self.inner.lock()
     }
+
+    // 解析elf文件数据
     pub fn new(elf_data: &[u8]) -> Self {
         // memory_set with elf program headers/trampoline/trap context/user stack
         let (memory_set, user_sp, entry_point) = MemorySet::from_elf(elf_data);
+
+        // 每一个elf都有一个memoryset，通过如下方法找到trap的物理地址
         let trap_cx_ppn = memory_set
             .translate(VirtAddr::from(TRAP_CONTEXT).into())
             .unwrap()
             .ppn();
+
         // alloc a pid and a kernel stack in kernel space
-        let pid_handle = pid_alloc();
-        let kernel_stack = KernelStack::new(&pid_handle);
+        let pid = pid_alloc();
+        let kernel_stack = KernelStack::new(&pid);
         let kernel_stack_top = kernel_stack.get_top();
         // push a task context which goes to trap_return to the top of kernel stack
         let task_control_block = Self {
-            pid: pid_handle,
+            pid,
             kernel_stack,
-            inner: unsafe {
-                UPSafeCell::new(TaskControlBlockInner {
-                    trap_cx_ppn,
-                    base_size: user_sp,
-                    task_cx: TaskContext::goto_trap_return(kernel_stack_top),
-                    task_status: TaskStatus::Ready,
-                    memory_set,
-                    parent: None,
-                    children: Vec::new(),
-                    exit_code: 0,
-                    fd_table: vec![
-                        // 0 -> stdin
-                        Some(FileDescriptor::new(false, FileType::Abstr(Arc::new(Stdin)))),
-                        // 1 -> stdout
-                        Some(FileDescriptor::new(
-                            false,
-                            FileType::Abstr(Arc::new(Stdout)),
-                        )),
-                        // 2 -> stderr
-                        Some(FileDescriptor::new(
-                            false,
-                            FileType::Abstr(Arc::new(Stdout)),
-                        )),
-                    ],
-                    current_path: String::from("/"),
-                })
-            },
+            inner: Arc::new(Mutex::new(TaskControlBlockInner {
+                trap_cx_ppn,
+                base_size: user_sp,
+                task_cx: TaskContext::goto_trap_return(kernel_stack_top),
+                task_status: TaskStatus::Ready,
+                memory_set,
+                parent: None,
+                children: Vec::new(),
+                exit_code: 0,
+                fd_table: vec![
+                    // 0 -> stdin
+                    Some(FileDescriptor::new(false, FileType::Abstr(Arc::new(Stdin)))),
+                    // 1 -> stdout
+                    Some(FileDescriptor::new(
+                        false,
+                        FileType::Abstr(Arc::new(Stdout)),
+                    )),
+                    // 2 -> stderr
+                    Some(FileDescriptor::new(
+                        false,
+                        FileType::Abstr(Arc::new(Stdout)),
+                    )),
+                ],
+                current_path: String::from("/"), // TODO 路径
+            })),
         };
         // prepare TrapContext in user space
         let trap_cx = task_control_block.inner_exclusive_access().get_trap_cx();
         *trap_cx = TrapContext::app_init_context(
             entry_point,
             user_sp,
-            KERNEL_SPACE.exclusive_access().token(),
+            KERNEL_SPACE.lock().token(),
             kernel_stack_top,
             trap_handler as usize,
         );
@@ -175,7 +177,7 @@ impl TaskControlBlock {
         let mut trap_cx = TrapContext::app_init_context(
             entry_point,
             user_sp,
-            KERNEL_SPACE.exclusive_access().token(),
+            KERNEL_SPACE.lock().token(),
             self.kernel_stack.get_top(),
             trap_handler as usize,
         );
@@ -201,20 +203,18 @@ impl TaskControlBlock {
         let task_control_block = Arc::new(TaskControlBlock {
             pid: pid_handle,
             kernel_stack,
-            inner: unsafe {
-                UPSafeCell::new(TaskControlBlockInner {
-                    trap_cx_ppn,
-                    base_size: parent_inner.base_size,
-                    task_cx: TaskContext::goto_trap_return(kernel_stack_top),
-                    task_status: TaskStatus::Ready,
-                    memory_set,
-                    parent: Some(Arc::downgrade(self)),
-                    children: Vec::new(),
-                    exit_code: 0,
-                    fd_table: new_fd_table,
-                    current_path: parent_inner.current_path.clone(),
-                })
-            },
+            inner: Arc::new(Mutex::new(TaskControlBlockInner {
+                trap_cx_ppn,
+                base_size: parent_inner.base_size,
+                task_cx: TaskContext::goto_trap_return(kernel_stack_top),
+                task_status: TaskStatus::Ready,
+                memory_set,
+                parent: Some(Arc::downgrade(self)),
+                children: Vec::new(),
+                exit_code: 0,
+                fd_table: new_fd_table,
+                current_path: parent_inner.current_path.clone(),
+            })),
         });
         // add child
         parent_inner.children.push(task_control_block.clone());
@@ -237,4 +237,5 @@ pub enum TaskStatus {
     Ready,
     Running,
     Zombie,
+    Blocking,
 }

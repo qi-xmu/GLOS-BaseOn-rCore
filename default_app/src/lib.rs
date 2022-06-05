@@ -114,21 +114,21 @@ pub fn exit(exit_code: i32) -> ! {
     sys_exit(exit_code);
 }
 pub fn yield_() -> isize {
-    sys_yield()
+    sys_sched_yield()
 }
 pub fn get_time() -> isize {
     let mut time = TimeVal::new();
-    sys_get_time(&mut time);
+    sys_gettimeofday(&mut time);
     (time.sec * 1000 + time.usec / 1000) as isize
 }
 pub fn getpid() -> isize {
     sys_getpid()
 }
 pub fn fork() -> isize {
-    sys_fork()
+    sys_clone()
 }
 pub fn exec(path: &str, args: &[*const u8]) -> isize {
-    sys_exec(path, args)
+    sys_execve(path, args)
 }
 
 const WNOHANG: isize = 1;

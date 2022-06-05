@@ -132,7 +132,7 @@ pub fn sys_sleep(sleep_ms: usize) -> isize {
     syscall(SYSCALL_NANOSLEEP, [sleep_ms, 0, 0, 0, 0, 0])
 }
 
-pub fn sys_yield() -> isize {
+pub fn sys_sched_yield() -> isize {
     syscall(SYSCALL_SCHED_YIELD, [0, 0, 0, 0, 0, 0])
 }
 
@@ -140,7 +140,7 @@ pub fn sys_kill(pid: usize, signal: i32) -> isize {
     syscall(SYSCALL_KILL, [pid, signal as usize, 0, 0, 0, 0])
 }
 
-pub fn sys_get_time(time: &mut TimeVal) -> isize {
+pub fn sys_gettimeofday(time: &mut TimeVal) -> isize {
     unsafe {
         syscall(
             SYSCALL_GETTIMEOFDAY,
@@ -153,11 +153,11 @@ pub fn sys_getpid() -> isize {
     syscall(SYSCALL_GETPID, [0, 0, 0, 0, 0, 0])
 }
 
-pub fn sys_fork() -> isize {
+pub fn sys_clone() -> isize {
     syscall(SYSCALL_CLONE, [0, 0, 0, 0, 0, 0])
 }
 
-pub fn sys_exec(path: &str, args: &[*const u8]) -> isize {
+pub fn sys_execve(path: &str, args: &[*const u8]) -> isize {
     syscall(
         SYSCALL_EXECVE,
         [path.as_ptr() as usize, args.as_ptr() as usize, 0, 0, 0, 0],

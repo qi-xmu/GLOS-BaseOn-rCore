@@ -8,7 +8,7 @@ use crate::fs::{open, DiskInodeType, FileDescriptor, FileType, OpenFlags};
 const FD_STDIN: usize = 0;
 const FD_STDOUT: usize = 1;
 
-pub fn sys_open(path: *const u8, flags: u32) -> isize {
+pub fn sys_openat(path: *const u8, flags: u32) -> isize {
     let task = current_task().unwrap();
     let token = current_user_token();
     let path = translated_str(token, path);
