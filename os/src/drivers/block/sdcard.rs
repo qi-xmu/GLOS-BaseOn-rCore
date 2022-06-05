@@ -502,7 +502,6 @@ impl</*'a,*/ X: SPI> SDCard</*'a,*/ X> {
         };
         info.CardBlockSize = 1 << u64::from(info.SD_csd.RdBlockLen);
         info.CardCapacity = (u64::from(info.SD_csd.DeviceSize) + 1) * 1024 * info.CardBlockSize;
-        println!("{:?}", info);
         Ok(info)
     }
 
@@ -734,14 +733,14 @@ fn init_sdcard() -> SDCard<SPIImpl<SPI0>> {
     peripherals.UARTHS.configure(115_200.bps(), &clocks);
     io_init();
 
-    alert!("[sdcard] init sdcard");
+    // alert!("[sdcard] init sdcard");
     let spi = peripherals.SPI0.constrain();
     let sd = SDCard::new(spi, SD_CS, SD_CS_GPIONUM);
     let info = sd.init().unwrap();
     let num_sectors = info.CardCapacity / 512;
     assert!(num_sectors > 0);
 
-    println!("[sdcard] init sdcard! finish {}", num_sectors);
+    // println!("[sdcard] init sdcard! finish {}", num_sectors);
     sd
 }
 

@@ -130,7 +130,7 @@ impl TaskControlBlock {
         task_control_block
     }
     pub fn exec(&self, elf_data: &[u8], args: Vec<String>) {
-        println!("Enter exec handler.");
+        // println!("Enter exec handler.");
         // memory_set with elf program headers/trampoline/trap context/user stack
         let (memory_set, mut user_sp, entry_point) = MemorySet::from_elf(elf_data);
         let trap_cx_ppn = memory_set
@@ -159,20 +159,20 @@ impl TaskControlBlock {
             }
             *translated_refmut(memory_set.token(), p as *mut u8) = 0;
         }
-        println!("make the user_sp aligned to 8B for k210 platform.");
+        // println!("make the user_sp aligned to 8B for k210 platform.");
         // make the user_sp aligned to 8B for k210 platform
         user_sp -= user_sp % core::mem::size_of::<usize>();
 
-        println!("hold current PCB lock.");
+        // println!("hold current PCB lock.");
         // **** hold current PCB lock
         let mut inner = self.inner_exclusive_access();
-        println!("ubstitute memory_set.");
+        // println!("ubstitute memory_set.");
         // substitute memory_set
         inner.memory_set = memory_set;
         // update trap_cx ppn
-        println!("update trap_cx ppn.");
+        // println!("update trap_cx ppn.");
         inner.trap_cx_ppn = trap_cx_ppn;
-        println!("initialize trap context.");
+        // println!("initialize trap context.");
         // initialize trap_cx
         let mut trap_cx = TrapContext::app_init_context(
             entry_point,

@@ -6,7 +6,7 @@ use crate::task::{
     add_task, current_task, current_user_token, exit_current_and_run_next,
     suspend_current_and_run_next,
 };
-use crate::timer::get_time_ms;
+use crate::timer::{get_time_ms, get_time_us, USEC_PER_SEC};
 use alloc::string::String;
 use alloc::sync::Arc;
 use alloc::vec::Vec;
@@ -23,14 +23,19 @@ pub fn sys_sched_yield() -> isize {
     0
 }
 
-pub fn sys_gettimeofday() -> isize {
-    get_time_ms() as isize
+pub fn sys_gettimeofday(ts: *mut u64, _tz: usize) -> isize {
+    let token = current_user_token();
+    let curtime = get_time_us();
+    *translated_refmut(token, ts) = (curtime / USEC_PER_SEC) as u64;
+    *translated_refmut(token, unsafe { ts.add(1) }) = (curtime % USEC_PER_SEC) as u64;
+    0
 }
 
 pub fn sys_getpid() -> isize {
     current_task().unwrap().pid.0 as isize
 }
 
+// fork
 pub fn sys_clone() -> isize {
     let current_task = current_task().unwrap();
     let new_task = current_task.fork();
@@ -47,7 +52,6 @@ pub fn sys_clone() -> isize {
 
 // 执行应用程序
 pub fn sys_execve(path: *const u8, mut args: *const usize) -> isize {
-    println!("user call sys_execve.");
     let token = current_user_token();
     let path = translated_str(token, path);
 
@@ -68,10 +72,7 @@ pub fn sys_execve(path: *const u8, mut args: *const usize) -> isize {
 
     /********** 测试开始 *****************/
     // DOING test_all 测试时暂时使用
-
-    println!("{} {}", current_path, path);
     if current_path == "/" && path == "test_all" {
-        println!("TEST ALL");
         drop(inner); // 释放锁，否则无法继续进行
         task.exec(get_test_binary(), args_vec);
         unsafe {
@@ -89,7 +90,6 @@ pub fn sys_execve(path: *const u8, mut args: *const usize) -> isize {
         DiskInodeType::File,
     ) {
         let all_data = app_inode.read_all();
-        println!("data len: {}", all_data.len());
         let task = current_task().unwrap();
         let argc = args_vec.len();
         drop(inner);

@@ -1,10 +1,12 @@
 #![allow(unused)]
 
 mod fs;
+mod mm;
 mod process;
 mod system;
 
 use fs::*;
+use mm::*;
 use process::*;
 use system::*;
 
@@ -72,17 +74,20 @@ const SYSCALL_SHUTDOWN: usize = 0xffff;
 pub fn syscall(syscall_id: usize, args: [usize; 3]) -> isize {
     match syscall_id {
         SYSCALL_GETCWD => sys_getcwd(args[0] as *mut u8, args[1]),
+        SYSCALL_TIMES => sys_times(args[0] as *mut usize), // 获取系统时间
+        SYSCALL_GETTIMEOFDAY => sys_gettimeofday(args[0] as *mut u64, args[1]), // 获取
+        SYSCALL_BRK => sys_brk(args[0]),
+        SYSCALL_NANOSLEEP => sys_nanosleep(args[0] as *mut u64), // sleep
         SYSCALL_OPENAT => sys_openat(args[0] as *const u8, args[1] as u32),
         SYSCALL_CLOSE => sys_close(args[0] as usize),
         SYSCALL_READ => sys_read(args[0], args[1] as *const u8, args[2]),
         SYSCALL_WRITE => sys_write(args[0], args[1] as *const u8, args[2]),
         SYSCALL_EXIT => sys_exit(args[0] as i32),
         SYSCALL_SCHED_YIELD => sys_sched_yield(),
-        SYSCALL_GETTIMEOFDAY => sys_gettimeofday(),
         SYSCALL_GETPID => sys_getpid(),
-        SYSCALL_CLONE => sys_clone(),
+        SYSCALL_CLONE => sys_clone(), // fork
         SYSCALL_EXECVE => sys_execve(args[0] as *const u8, args[1] as *const usize),
-        SYSCALL_WAIT4 => sys_wait4(args[0] as isize, args[1] as *mut i32),
+        SYSCALL_WAIT4 => sys_wait4(args[0] as isize, args[1] as *mut i32), // waitpid
         SYSCALL_SHUTDOWN => sys_shutdown(),
         _ => panic!("Unsupported syscall_id: {}", syscall_id),
     }

@@ -3,13 +3,16 @@ include ../Makefile.in
 
 # BOARD
 BOARD ?= qemu
+MODE ?= release
 SBI ?= rustsbi
 BOOTLOADER := ../bootloader/$(SBI)-$(BOARD).bin
 K210_BOOTLOADER_SIZE := 131072
 
 # Building mode argument
 ifeq ($(MODE), release)
-	MODE_ARG := --release
+	BUILD_MODE := --release
+else
+	BUILD_MODE := 
 endif
 
 # KERNEL ENTRY
@@ -30,7 +33,7 @@ OBJCOPY := rust-objcopy --binary-architecture=riscv64
 # Disassembly
 DISASM ?= -x
 
-build: switch-check $(KERNEL_BIN)
+build: env switch-check $(KERNEL_BIN)
 
 switch-check:
 ifeq ($(BOARD), qemu)
@@ -41,7 +44,7 @@ endif
 
 env:
 	(rustup target list | grep "riscv64gc-unknown-none-elf (installed)") || rustup target add $(TARGET)
-	cargo install cargo-binutils --vers =0.3.3
+	# cargo install cargo-binutils --vers =0.3.3
 	rustup component add rust-src
 	rustup component add llvm-tools-preview
 
@@ -51,7 +54,7 @@ $(KERNEL_BIN): kernel
 kernel:
 	@echo Platform: $(BOARD)
 	@cp src/linker-$(BOARD).ld src/linker.ld
-	@cargo build --release --features "board_$(BOARD)"
+	@cargo build --offline $(BUILD_MODE) --features "board_$(BOARD)"
 	@rm src/linker.ld
 
 clean:
@@ -80,7 +83,7 @@ ifeq ($(BOARD),qemu)
 		-device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0 \
 		-device loader,file=$(KERNEL_BIN),addr=$(KERNEL_ENTRY_PA)
 else
-	# (which $(K210-BURNER)) || (cd .. && git clone https://github.com/sipeed/kflash.py.git && mv kflash.py tools)
+	(which $(K210-BURNER)) || (cd .. && git clone https://github.com/sipeed/kflash.py.git && mv kflash.py tools)
 	@cp $(BOOTLOADER) $(BOOTLOADER).copy
 	@dd if=$(KERNEL_BIN) of=$(BOOTLOADER).copy bs=$(K210_BOOTLOADER_SIZE) seek=1
 	@mv $(BOOTLOADER).copy $(KERNEL_BIN)
