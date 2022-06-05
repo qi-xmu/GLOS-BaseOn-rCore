@@ -99,6 +99,6 @@ lazy_static! {
 /// Add init process to the manager
 pub fn add_initproc() {
     add_task(INITPROC.clone());
-    add_task(Arc::new(TaskControlBlock::new(get_hello_binary())));
+    // add_task(Arc::new(TaskControlBlock::new(get_hello_binary())));
     // add_task(Arc::new(TaskControlBlock::new("test", get_test_binary())));
 }

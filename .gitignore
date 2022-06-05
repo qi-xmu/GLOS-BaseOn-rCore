@@ -18,3 +18,4 @@ easy-fs-fuse/target/*
 tools/
 pushall.sh
 fat32-fuse
+os.bin

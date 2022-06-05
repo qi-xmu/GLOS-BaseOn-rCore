@@ -50,7 +50,7 @@ fn clear_bss() {
 #[no_mangle]
 pub fn rust_main() -> ! {
     clear_bss(); // 清除数据段
-    println!("[kernel] Hello, world!");
+                 // println!("[kernel] Hello, world!");
     mm::init();
     mm::remap_test();
     trap::init();
