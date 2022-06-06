@@ -51,7 +51,7 @@ env:
 $(KERNEL_BIN): kernel
 	@$(OBJCOPY) $(KERNEL_ELF) --strip-all -O binary $@
 
-kernel:
+kernel: app
 	@echo Platform: $(BOARD)
 	@cp src/linker-$(BOARD).ld src/linker.ld
 	@cargo build --offline $(BUILD_MODE) --features "board_$(BOARD)"
@@ -68,7 +68,7 @@ disasm-vim: kernel
 	@vim $(DISASM_TMP)
 	@rm $(DISASM_TMP)
 
-run: app run-inner
+run: run-inner
 	
 app:
 	cd ../default_app && make clean && make 
