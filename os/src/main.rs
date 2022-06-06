@@ -32,6 +32,10 @@ pub mod trap;
 
 use core::arch::global_asm;
 
+use k210_soc::sleep::usleep;
+
+use crate::timer::*;
+
 global_asm!(include_str!("entry.asm"));
 global_asm!(include_str!("load_default_app.asm"));
 /// clear BSS segment
@@ -51,6 +55,7 @@ fn clear_bss() {
 pub fn rust_main() -> ! {
     clear_bss(); // 清除数据段
                  // println!("[kernel] Hello, world!");
+
     mm::init();
     // mm::remap_test();
     trap::init();

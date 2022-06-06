@@ -1,4 +1,4 @@
-#[allow(unused)]
+// #[allow(unused)]
 
 // 这里是一些全局的变量参数
 pub const USER_STACK_SIZE: usize = 4096 * 2; // 8K

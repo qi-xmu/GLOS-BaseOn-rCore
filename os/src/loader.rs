@@ -1,5 +1,6 @@
 use core::slice::from_raw_parts;
 
+// 加载default_app的指针到代码中
 pub fn get_initproc_binary() -> &'static [u8] {
     extern "C" {
         fn sinitproc();

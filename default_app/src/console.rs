@@ -35,11 +35,10 @@ macro_rules! println {
 #[macro_export]
 macro_rules! alert {
     ($fmt: literal $(, $($arg: tt)+)?) => {
-        print!("\x1b[1,31m");
-        $crate::console::print(format_args!(concat!($fmt, "\n") $(, $($arg)+)?));
-        print!("\x1b[0m");
+        $crate::console::print(format_args!(concat!("\x1b[31m", $fmt, "\x1b[0m\n") $(, $($arg)+)?));
     }
 }
+
 
 pub fn getchar() -> u8 {
     let mut c = [0u8; 1];

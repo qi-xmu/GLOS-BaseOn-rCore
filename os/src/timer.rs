@@ -13,11 +13,12 @@ pub fn get_time() -> usize {
 }
 /// get current time in microseconds
 pub fn get_time_ms() -> usize {
-    time::read() / (CLOCK_FREQ / MSEC_PER_SEC)
+    time::read() * MSEC_PER_SEC / CLOCK_FREQ
 }
 
+/// 按微秒获取当前时间
 pub fn get_time_us() -> usize {
-    time::read() * 1000 / (CLOCK_FREQ / MSEC_PER_SEC)
+    time::read() * USEC_PER_SEC / CLOCK_FREQ
 }
 
 /// set the next timer interrupt

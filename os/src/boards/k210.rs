@@ -1,7 +1,8 @@
 #![allow(unused)]
 
+// 时钟频率
 pub const CLOCK_FREQ: usize = 403000000 / 62;
-
+// 内存映射IO
 pub const MMIO: &[(usize, usize)] = &[
     // we don't need clint in S priv when running
     // we only need claim/complete for target0 after initializing

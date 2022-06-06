@@ -11,7 +11,7 @@ use k210_hal::prelude::*;
 use k210_pac::{Peripherals, SPI0};
 use k210_soc::{
     fpioa::{self, io},
-    //dmac::{dma_channel, DMAC, DMACExt},
+    dmac::{dma_channel, DMAC, DMACExt},
     gpio,
     gpiohs,
     sleep::usleep,
