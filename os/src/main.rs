@@ -52,7 +52,7 @@ pub fn rust_main() -> ! {
     clear_bss(); // 清除数据段
                  // println!("[kernel] Hello, world!");
     mm::init();
-    mm::remap_test();
+    // mm::remap_test();
     trap::init();
     trap::enable_timer_interrupt();
     timer::set_next_trigger();

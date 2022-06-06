@@ -22,7 +22,7 @@ clean:
 	&& make clean 
 
 vfs: 
-	sudo ./makefs.sh
+	cd os && make vfs
 
 fs: 
 	./user/build-oscomp.sh

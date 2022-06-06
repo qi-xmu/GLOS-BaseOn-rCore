@@ -68,7 +68,6 @@ fn test() {
 
 #[no_mangle]
 pub fn main() -> i32 {
-    alert!("Start Test All");
     test();
     0
 }

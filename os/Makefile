@@ -92,6 +92,11 @@ else
 	python3 -m serial.tools.miniterm --eol LF --dtr 0 --rts 0 --filter direct $(K210-SERIALPORT) 115200
 endif
 
+user:
+	cd ../user && ./build-oscomp.sh
+
+vfs: user
+	cd .. && ./makefs.sh
 
 debug: build
 	@tmux new-session -d \
@@ -105,4 +110,4 @@ gdbserver: build
 gdbclient:
 	@$(GDB) -ex 'file $(KERNEL_ELF)' -ex 'set arch riscv:rv64' -ex 'target remote localhost:1234'
 
-.PHONY: build env kernel clean disasm disasm-vim run-inner switch-check gdbserver gdbclient  app
+.PHONY: build env kernel clean disasm disasm-vim run-inner switch-check gdbserver gdbclient app vfs user
